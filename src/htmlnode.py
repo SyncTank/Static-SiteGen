@@ -20,5 +20,23 @@ class HtmlNode:
     def __repr__(self):
         return f"HTMLNode({self.tag}, {self.value}, children: {self.children}, {self.props})"
 
-html_node = HtmlNode("")
-html_node.PROPS_TO_HTML()
+
+class LeafNode(HtmlNode):
+    def __init__(self, tag, value, props=None):
+        super().__init__(tag, value, None, props)
+
+    def TO_HTML(self):
+        if self.value is None:
+            raise ValueError("LeafNode value cannot be None")
+        elif self.tag is None:
+            return f"self.value"
+        else:
+            if self.tag == "p":
+                return f"<{self.tag}>{self.value}</{self.tag}>"
+            elif self.tag == "a":
+                return f"<{self.tag}{self.PROPS_TO_HTML()}>{self.value}</{self.tag}>"
+            else:
+                return None
+
+    def __repr__(self):
+        return f"HTMLNode({self.tag}, {self.value}, children: {self.children}, {self.props})"
