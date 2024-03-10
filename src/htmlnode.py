@@ -18,12 +18,7 @@ class HtmlNode:
         return temp_string
 
     def __repr__(self):
-        child = (self.tag, self.value, self.children, self.PROPS_TO_HTML())
-        for c in child:
-            if c is not None:
-                print(c)
-            else:
-                print("None")
+        return f"HTMLNode({self.tag}, {self.value}, children: {self.children}, {self.props})"
 
 html_node = HtmlNode("")
 html_node.PROPS_TO_HTML()
