@@ -24,19 +24,16 @@ class HtmlNode:
 class LeafNode(HtmlNode):
     def __init__(self, tag, value, props=None):
         super().__init__(tag, value, None, props)
-        self.tag = tag
-        self.value = value
-        self.props = props
 
     def to_html(self):
         if self.value is None:
             raise ValueError("LeafNode value cannot be None")
-        elif self.tag is None and self.value is not None:
+        elif self.tag is None:
             return f"{self.value}"
         else:
             if self.tag == "a" and self.props is not None:
                 return f"<{self.tag}{self.props_to_html()}>{self.value}</{self.tag}>"
-            elif self.tag == "a" and self.props is None:
+            elif self.tag == "a":
                 return f'<{self.tag} href=:"">{self.value}</{self.tag}>'
             else:
                 return f"<{self.tag}>{self.value}</{self.tag}>"
@@ -48,14 +45,11 @@ class LeafNode(HtmlNode):
 class ParentNode(HtmlNode):
     def __init__(self, tag, children, props=None):
         super().__init__(tag, children, props)
-        self.tag = tag
-        self.children = children
-        self.props = props
 
     def to_html(self):
         if self.tag is None:
             raise ValueError("tag has no object")
-        elif self.children is None:
+        elif self.children is None or len(self.children) == 0:
             raise ValueError("No child")
         else:
             base_body = ""

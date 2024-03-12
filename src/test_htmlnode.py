@@ -58,9 +58,22 @@ class TestHtmlNode(unittest.TestCase):
                                                           )))
         print(node.to_html())
 
-    def test_parent_node_parents_None(self):
+    def test_parent_node_parents_fail(self):
         node = ParentNode("p", [])
-        print(node.to_html())
+        with self.assertRaises(ValueError) as context:
+            node.to_html()
+
+        self.assertEqual(str(context.exception), "No child")
+
+    def test_parent_node_leaf_fail(self):
+        node = LeafNode("b", None)
+        with self.assertRaises(ValueError) as context:
+            node.to_html()
+
+        self.assertEqual(str(context.exception), str(context.exception))
+        print(str(context.exception))
+
+
 
 
 if __name__ == "__main__":
