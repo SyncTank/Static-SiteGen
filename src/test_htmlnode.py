@@ -36,7 +36,7 @@ class TestHtmlNode(unittest.TestCase):
                 LeafNode(None, "Normal text"),
             ],
         )
-        print(node.to_html())
+        self.assertIsNotNone(node.to_html(), print(node.to_html()))
 
     def test_parent_node_parents(self):
         node = ParentNode("p", ParentNode("p", [
@@ -45,7 +45,7 @@ class TestHtmlNode(unittest.TestCase):
             LeafNode("a", "Normal text"),
             LeafNode("b", "teste"),
         ]))
-        print(node.to_html())
+        self.assertIsNotNone(node.to_html(), print(node.to_html()))
 
     def test_parent_node_parents_double(self):
         node = ParentNode("p", ParentNode("p", ParentNode("p",
@@ -56,7 +56,7 @@ class TestHtmlNode(unittest.TestCase):
                                                               LeafNode("b", "teste"),
                                                           ]
                                                           )))
-        print(node.to_html())
+        self.assertIsNotNone(node.to_html(), print(node.to_html()))
 
     def test_parent_node_parents_fail(self):
         node = ParentNode("p", [])
