@@ -44,12 +44,9 @@ class LeafNode(HtmlNode):
 
 class ParentNode(HtmlNode):
     def __init__(self, tag, children, props=None):
-        super().__init__(tag, children, props) # figure how to remove properties from classes
-        self.tag = tag
-        self.children = children
-        self.props = props
+        super().__init__(tag, None, children, props)
 
-    def to_html(self): # Add a check for child len if 0 found and not a leaf
+    def to_html(self):
         if self.tag is None:
             raise ValueError("tag has no object")
         elif self.children is None or not self.children:
