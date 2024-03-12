@@ -45,11 +45,14 @@ class LeafNode(HtmlNode):
 class ParentNode(HtmlNode):
     def __init__(self, tag, children, props=None):
         super().__init__(tag, children, props)
+        self.tag = tag
+        self.children = children
+        self.props = props
 
     def to_html(self):
         if self.tag is None:
             raise ValueError("tag has no object")
-        elif self.children is None or len(self.children) == 0:
+        elif self.children is None:
             raise ValueError("No child")
         else:
             base_body = ""
