@@ -74,7 +74,5 @@ class TestHtmlNode(unittest.TestCase):
         print(str(context.exception))
 
 
-
-
 if __name__ == "__main__":
     unittest.main()
