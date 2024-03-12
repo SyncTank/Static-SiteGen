@@ -10,21 +10,21 @@ class TestHtmlNode(unittest.TestCase):
             self.assertIsNone(prop)
 
     def test_html_node_props_to_html(self):
-        html_node = HtmlNode("raww", "{Key: 2342, pair: {one : 1, Two: 2}}", "325235",
+        html_node = HtmlNode("raw", "{Key: 2342, pair: {one : 1, Two: 2}}", "325235",
                              {"href": "https://www.google.com", "target": "_blank"}
                              )
         self.assertEqual(html_node.props_to_html(), ' href="https://www.google.com" target="_blank"')
         print(html_node)
 
     def test_html_leaf_node(self):
-        New_leaf = LeafNode("p", "This is a paragraph of text.")
-        self.assertEqual(New_leaf.to_html(), "<p>This is a paragraph of text.</p>")
-        print(New_leaf.to_html())
+        new_leaf = LeafNode("p", "This is a paragraph of text.")
+        self.assertEqual(new_leaf.to_html(), "<p>This is a paragraph of text.</p>")
+        print(new_leaf.to_html())
 
     def test_html_leaf_node_two(self):
-        New_leaf2 = LeafNode("a", "Click me!", {"href": "https://www.google.com"})
-        self.assertEqual(New_leaf2.to_html(), '<a href="https://www.google.com">Click me!</a>')
-        print(New_leaf2.to_html())
+        new_leaf2 = LeafNode("a", "Click me!", {"href": "https://www.google.com"})
+        self.assertEqual(new_leaf2.to_html(), '<a href="https://www.google.com">Click me!</a>')
+        print(new_leaf2.to_html())
 
     def test_parent_node_leafs(self):
         node = ParentNode(
