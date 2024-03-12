@@ -34,8 +34,10 @@ class LeafNode(HtmlNode):
         elif self.tag is None and self.value is not None:
             return f"{self.value}"
         else:
-            if self.tag == "a":
+            if self.tag == "a" and self.props is not None:
                 return f"<{self.tag}{self.props_to_html()}>{self.value}</{self.tag}>"
+            elif self.tag == "a" and self.props is None:
+                return f'<{self.tag} href=:"">{self.value}</{self.tag}>'
             else:
                 return f"<{self.tag}>{self.value}</{self.tag}>"
 
@@ -56,10 +58,15 @@ class ParentNode(HtmlNode):
         elif self.children is None:
             raise ValueError("No child")
         else:
-            means = ""
-            means += "<" + self.tag + ">"
+            base_body = ""
+            base_body += "<" + self.tag + ">"
 
-            for child in self.children:
-                means += child.to_html()
+            if type(self.children) is ParentNode:
+                base_body += self.children.to_html()
+            else:
+                for child in self.children:
+                    base_body += child.to_html()
 
-            means += "</" + self.tag + ">"
+            base_body += "</" + self.tag + ">"
+
+            return base_body
