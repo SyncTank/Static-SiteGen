@@ -23,18 +23,20 @@ class TextNode:
         if self.text_Type not in self.text_type_dict:
             raise Exception(f"Text type not supported: {self.text_Type}")
         else:
-            if self.text_Type == "text":
-                pass
-            elif self.text_Type == "bold":
-                pass
-            elif self.text_Type == "italic":
-                pass
-            elif self.text_Type == "code":
-                pass
-            elif self.text_Type == "link":
-                pass
-            elif self.text_Type == "image":
-                pass
+            match self.text_Type:
+                case "text":
+                    pass
+                case "bold":
+                    pass
+                case "italic":
+                    pass
+                case "code":
+                    pass
+                case "link":
+                    pass
+                case "image":
+                    pass
+
 
     def __repr__(self) -> str:
         return f"TextNode( {self.text}, {self.text_Type}, {self.url} )"
