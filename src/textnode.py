@@ -19,24 +19,11 @@ class TextNode:
                 self.url == other.url
         )
 
-    def text_node_to_html_node(self):
+    def text_node_to_html_node(self, text_node):
         if self.text_Type not in self.text_type_dict:
             raise Exception(f"Text type not supported: {self.text_Type}")
         else:
-            match self.text_Type:
-                case "text":
-                    pass
-                case "bold":
-                    pass
-                case "italic":
-                    pass
-                case "code":
-                    pass
-                case "link":
-                    pass
-                case "image":
-                    pass
-
+            pass
 
     def __repr__(self) -> str:
         return f"TextNode( {self.text}, {self.text_Type}, {self.url} )"
