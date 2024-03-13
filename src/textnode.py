@@ -1,4 +1,3 @@
-
 class TextNode:
     def __init__(self, text, text_Type, url=None) -> None:
         self.text = text
@@ -15,16 +14,27 @@ class TextNode:
 
     def __eq__(self, other):
         return (
-            self.text == other.text and
-            self.text_Type == other.text_Type and
-            self.url == other.url
+                self.text == other.text and
+                self.text_Type == other.text_Type and
+                self.url == other.url
         )
 
     def text_node_to_html_node(self):
         if self.text_Type not in self.text_type_dict:
             raise Exception(f"Text type not supported: {self.text_Type}")
         else:
-            pass
+            if self.text_Type == "text":
+                pass
+            elif self.text_Type == "bold":
+                pass
+            elif self.text_Type == "italic":
+                pass
+            elif self.text_Type == "code":
+                pass
+            elif self.text_Type == "link":
+                pass
+            elif self.text_Type == "image":
+                pass
 
     def __repr__(self) -> str:
         return f"TextNode( {self.text}, {self.text_Type}, {self.url} )"
