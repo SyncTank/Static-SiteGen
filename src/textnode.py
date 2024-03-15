@@ -1,3 +1,6 @@
+from htmlnode import LeafNode
+
+
 class TextNode:
     def __init__(self, text, text_Type, url=None) -> None:
         self.text = text
@@ -11,6 +14,15 @@ class TextNode:
             "link": "a",
             "image": "img"
         }
+
+    def text_node_to_html_node(self):
+        if self.text_Type not in self.text_type_dict:
+            raise Exception(f"Text type not supported: {self.text_Type}")
+        else:
+            if self.text_Type == "html":
+                return LeafNode(self.text_type_dict[self.text_Type], self.text, self.url)
+            else:
+                return LeafNode(self.text_type_dict[self.text_Type], self.text)
 
     def __eq__(self, other):
         return (
