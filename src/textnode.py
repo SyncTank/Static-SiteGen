@@ -16,7 +16,7 @@ class TextNode:
         }
 
     def text_node_to_html_node(self):
-        if self.text_Type not in self.text_type_dict:
+        if self.text_Type not in self.text_type_dict: # test types to work good
             raise Exception(f"Text type not supported: {self.text_Type}")
         else:
             if self.text_Type == "html":
