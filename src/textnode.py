@@ -8,6 +8,36 @@ text_type_dict = {
     "link": "a",
     "image": "img"
 }
+delimiter_dict = {
+    "text": None,
+    "bold": "**",
+    "italic": "*",
+    "code": "```",
+    "link": "[link](",
+    "image": "![",
+    "header": "#",
+    "unordered": "* ",
+    "quotes": "> ",
+    "order": ". "
+}
+
+
+def split_nodes_delimiter(old_node, text_Type) -> list:
+    text_node_list = []
+    string_builder = ''
+    delimiter_type = delimiter_dict[text_Type]
+    temp_node = old_node.text.split(' ')
+
+    for word in temp_node:
+        if delimiter_type in word:
+            if len(string_builder) != 0:
+                text_node_list.append(TextNode(string_builder, 'text'))
+                string_builder = ''
+            text_node_list.append(TextNode(word.replace(delimiter_type, ""), text_Type))
+        else:
+            string_builder += word + " "
+
+    return text_node_list
 
 
 class TextNode:
@@ -37,5 +67,3 @@ class TextNode:
     def __repr__(self) -> str:
         return f"TextNode( {self.text}, {self.text_Type}, {self.url} )"
 
-# node = TextNode("Hello World", 'bold', url="")
-# node.text_node_to_html_node()

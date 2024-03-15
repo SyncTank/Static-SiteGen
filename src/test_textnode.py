@@ -1,7 +1,6 @@
 import unittest
 
-from textnode import TextNode
-
+from textnode import TextNode, split_nodes_delimiter
 
 class TestTextNode(unittest.TestCase):
     def test_eq(self) -> None:
@@ -38,6 +37,51 @@ class TestTextNode(unittest.TestCase):
     def test_text_to_html_image(self) -> None:
         node = TextNode("This is not a drill", "image", "url/of/image.jpg")
         self.assertIsNotNone(node.text_node_to_html_node(), print(node.text_node_to_html_node()))
+
+    def test_nodes_delimiter_text(self) -> None:
+        node = TextNode("This is not a drill", "text")
+        new_node = split_nodes_delimiter(node, node.text_Type)
+        self.assertIsNotNone(new_node, print(new_node))
+
+    def test_nodes_delimiter_bold(self) -> None:
+        node = TextNode("This is **not** a drill", "bold")
+        new_node = split_nodes_delimiter(node, node.text_Type)
+        self.assertIsNotNone(new_node, print(new_node))
+
+    def test_nodes_delimiter_italic(self) -> None:
+        node = TextNode("This is *not* a drill", "italic")
+        new_node = split_nodes_delimiter(node, node.text_Type)
+        self.assertIsNotNone(new_node, print(new_node))
+
+    def test_nodes_delimiter_code(self) -> None:
+        node = TextNode("This is ```not``` a drill", "code")
+        new_node = split_nodes_delimiter(node, node.text_Type)
+        self.assertIsNotNone(new_node, print(new_node))
+
+    def test_nodes_delimiter_link(self) -> None:
+        node = TextNode("This is [link](www.google.com) a drill", "link")
+        new_node = split_nodes_delimiter(node, node.text_Type)
+        self.assertIsNotNone(new_node, print(new_node))
+
+    def test_nodes_delimiter_header(self) -> None:
+        node = TextNode("This is #not a drill", "header")
+        new_node = split_nodes_delimiter(node, node.text_Type)
+        self.assertIsNotNone(new_node, print(new_node))
+
+    def test_nodes_delimiter_unordered(self) -> None:
+        node = TextNode("This is * notes a drill", "unordered")
+        new_node = split_nodes_delimiter(node, node.text_Type)
+        self.assertIsNotNone(new_node, print(new_node))
+
+    def test_nodes_delimiter_quotes(self) -> None:
+        node = TextNode("This is > not a drill", "quotes")
+        new_node = split_nodes_delimiter(node, node.text_Type)
+        self.assertIsNotNone(new_node, print(new_node))
+
+    def test_nodes_delimiter_order(self) -> None:
+        node = TextNode("This is 1. yesd a drill", "order")
+        new_node = split_nodes_delimiter(node, node.text_Type)
+        self.assertIsNotNone(new_node, print(new_node))
 
 
 if __name__ == "__main__":
