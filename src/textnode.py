@@ -20,9 +20,9 @@ class TextNode:
             raise Exception(f"Text type not supported: {self.text_Type}")
         else:
             if self.text_Type == "html":
-                return LeafNode(self.text_type_dict[self.text_Type], self.text, self.url)
+                return LeafNode(self.text_type_dict[self.text_Type], self.text, self.url).to_html()
             else:
-                return LeafNode(self.text_type_dict[self.text_Type], self.text)
+                return LeafNode(self.text_type_dict[self.text_Type], self.text).to_html()
 
     def __eq__(self, other):
         return (

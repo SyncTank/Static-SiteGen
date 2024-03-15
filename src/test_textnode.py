@@ -19,6 +19,16 @@ class TestTextNode(unittest.TestCase):
         node2 = TextNode("This is not a drill", "Italic", None)
         self.assertEqual(node, node2)
 
+    def test_text_to_html_p(self):
+        node = TextNode("This is not a drill", "Italic")
+        node2 = TextNode("This is not a drill", "Italic", None)
+        self.assertEqual(node, node2)
+
+    def test_text_to_html_link(self):
+        node = TextNode("This is not a drill", "Italic")
+        node2 = TextNode("This is not a drill", "Italic", None)
+        self.assertEqual(node, node2)
+
 
 if __name__ == "__main__":
     unittest.main()
