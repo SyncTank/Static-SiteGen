@@ -4,38 +4,38 @@ from textnode import TextNode
 
 
 class TestTextNode(unittest.TestCase):
-    def test_eq(self):
+    def test_eq(self) -> None:
         node = TextNode("This is a text node", "bold")
         node2 = TextNode("This is a text node", "bold")
         self.assertEqual(node, node2)
 
-    def test_eq_neg(self):
+    def test_eq_neg(self) -> None:
         node = TextNode("This is not a drill", "bold")
         node2 = TextNode("This is not a drill", "bold")
         self.assertEqual(node, node2)
 
-    def test_eq_set(self):
+    def test_eq_set(self) -> None:
         node = TextNode("This is not a drill", "Italic")
         node2 = TextNode("This is not a drill", "Italic", None)
         self.assertEqual(node, node2)
 
-    def test_text_to_html_p(self):
+    def test_text_to_html_p(self) -> None:
         node = TextNode("This is not a drill", "text")
         self.assertIsNotNone(node.text_node_to_html_node(), print(node.text_node_to_html_node()))
 
-    def test_text_to_html_bold(self):
+    def test_text_to_html_bold(self) -> None:
         node = TextNode("This is not a drill", "bold")
         self.assertIsNotNone(node.text_node_to_html_node(), print(node.text_node_to_html_node()))
 
-    def test_text_to_html_no_link(self):
+    def test_text_to_html_no_link(self) -> None:
         node = TextNode("This is not a drill", "link")
         self.assertIsNotNone(node.text_node_to_html_node(), print(node.text_node_to_html_node()))
 
-    def test_text_to_html_link(self):
+    def test_text_to_html_link(self) -> None:
         node = TextNode("This is not a drill", "link", "https://www.google.com")
         self.assertIsNotNone(node.text_node_to_html_node(), print(node.text_node_to_html_node()))
 
-    def test_text_to_html_image(self):
+    def test_text_to_html_image(self) -> None:
         node = TextNode("This is not a drill", "image", "url/of/image.jpg")
         self.assertIsNotNone(node.text_node_to_html_node(), print(node.text_node_to_html_node()))
 

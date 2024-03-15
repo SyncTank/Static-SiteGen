@@ -16,7 +16,7 @@ class TextNode:
         self.text_Type = text_Type
         self.url = url
 
-    def text_node_to_html_node(self) -> LeafNode:
+    def text_node_to_html_node(self) -> str:
         if self.text_Type not in text_type_dict:
             raise Exception(f"Text type not supported: {self.text_Type}")
         else:

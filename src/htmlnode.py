@@ -8,7 +8,7 @@ class HtmlNode:
     def to_html(self):
         raise NotImplementedError("TO_HTML method is not implemented")
 
-    def props_to_html(self):
+    def props_to_html(self) -> str:
         if self.props is None:
             return "None"
         temp_string = ""
@@ -25,7 +25,7 @@ class LeafNode(HtmlNode):
     def __init__(self, tag, value, props=None):
         super().__init__(tag, value, None, props)
 
-    def to_html(self):
+    def to_html(self) -> str:
         if self.value is None:
             raise ValueError("LeafNode value cannot be None")
         elif self.tag is None:
@@ -36,7 +36,7 @@ class LeafNode(HtmlNode):
             elif self.tag == "a":
                 return f'<{self.tag} href=:"">{self.value}</{self.tag}>'
             elif self.tag == "img":
-                return f'<img{self.props_to_html()}>'
+                return f'<{self.tag}{self.props_to_html()}>'
             else:
                 return f"<{self.tag}>{self.value}</{self.tag}>"
 
@@ -48,7 +48,7 @@ class ParentNode(HtmlNode):
     def __init__(self, tag, children, props=None):
         super().__init__(tag, None, children, props)
 
-    def to_html(self):
+    def to_html(self) -> str:
         if self.tag is None:
             raise ValueError("tag has no object")
         elif self.children is None or not self.children:
