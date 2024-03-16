@@ -24,34 +24,38 @@ delimiter_dict = {
 
 def split_nodes_delimiter(old_node, text_Type) -> list:
     text_node_list = []
-    string_builder = ''
+    string_builder = ""
     delimiter_type = delimiter_dict[text_Type]
     temp_node = old_node.text.split(' ')
+
     if old_node.text is None:
-        if delimiter_type not in old_node.text:
-            raise Exception("Invalid Markdown syntax")
+        raise Exception("Invalid Markdown syntax")
 
     if text_Type == "text" or type(old_node) is not TextNode:
         return [TextNode(old_node.text, text_Type)]
 
+    temp_string = ""
+    for word in old_node.text:
+
+        string_builder += word
+
+
+    print(string_builder)
+    print(old_node.text)
     print(temp_node)
 
-    for word in temp_node:
-        if delimiter_type in word:
-            if len(string_builder) != 0:
-                text_node_list.append(TextNode(string_builder, 'text'))
-                string_builder = ''
-            if text_Type == 'link':
-                print(word)
-            elif text_Type == 'image':
-                print(word)
-            else:
-                text_node_list.append(TextNode(word.replace(delimiter_type, ""), text_Type))
-        else:
-            string_builder += word + " "
-
-    if len(string_builder) != 0:
-        text_node_list.append(TextNode(string_builder, 'text'))
+    #for word in temp_node:
+    #    if delimiter_type in word:
+    #        if len(string_builder) != 0:
+    #            text_node_list.append(TextNode(string_builder, 'text'))
+    #            string_builder = ''
+#
+    #        text_node_list.append(TextNode(word.replace(delimiter_type, ""), text_Type))
+    #    else:
+    #        string_builder += word + " "
+#
+    #if len(string_builder) != 0:
+    #    text_node_list.append(TextNode(string_builder, 'text'))
 
     return text_node_list
 
