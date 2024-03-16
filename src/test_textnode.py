@@ -41,59 +41,76 @@ class TestTextNode(unittest.TestCase):
 
     def test_nodes_delimiter_text(self) -> None:
         node = TextNode("This is not a drill", "text")
-        new_node = split_nodes_delimiter(node, node.text_Type)
+        new_node = split_nodes_delimiter(node)
         self.assertIsNotNone(new_node, print(new_node))
 
     def test_nodes_delimiter_bold(self) -> None:
         node = TextNode("This is **not** a drill", "bold")
-        new_node = split_nodes_delimiter(node, node.text_Type)
+        new_node = split_nodes_delimiter(node)
         self.assertIsNotNone(new_node, print(new_node))
 
     def test_nodes_delimiter_italic(self) -> None:
         node = TextNode("This is *not* a drill", "italic")
-        new_node = split_nodes_delimiter(node, node.text_Type)
+        new_node = split_nodes_delimiter(node)
         self.assertIsNotNone(new_node, print(new_node))
 
     def test_nodes_delimiter_double_italic(self) -> None:
         node = TextNode("This is *not* a *drill* test", "italic")
-        new_node = split_nodes_delimiter(node, node.text_Type)
+        new_node = split_nodes_delimiter(node)
         self.assertIsNotNone(new_node, print(new_node))
 
     def test_nodes_delimiter_code(self) -> None:
-        node = TextNode("This is ```not``` a drill", "code")
-        new_node = split_nodes_delimiter(node, node.text_Type)
+        node = TextNode("This is ```not``` a ```drill``` test", "code")
+        new_node = split_nodes_delimiter(node)
+        self.assertIsNotNone(new_node, print(new_node))
+
+    def test_nodes_delimiter_two_types(self) -> None:
+        node = TextNode("This is *not* a ```drill``` test", "italic")
+        new_node = split_nodes_delimiter(node)
         self.assertIsNotNone(new_node, print(new_node))
 
     def test_nodes_delimiter_link(self) -> None:
         # TextNode("This is not a drill", "link", "https://www.google.com")
         node = TextNode("This is [here sdfa](www.google.com) a drill", "link")
-        new_node = split_nodes_delimiter(node, node.text_Type)
+        new_node = split_nodes_delimiter(node)
+        self.assertIsNotNone(new_node, print(new_node))
+
+    def test_nodes_delimiter_link_italic(self) -> None:
+        # TextNode("This is not a drill", "link", "https://www.google.com")
+        node = TextNode("This is [here sdfa](www.google.com) *a* drill", "link")
+        new_node = split_nodes_delimiter(node)
+        self.assertIsNotNone(new_node, print(new_node))
+
+    def test_nodes_delimiter_link_italic_in(self) -> None:
+        # TextNode("This is not a drill", "link", "https://www.google.com")
+        node = TextNode("This is [here *a* sdfa](www.google.com) *a* drill", "link")
+        new_node = split_nodes_delimiter(node)
         self.assertIsNotNone(new_node, print(new_node))
 
     def test_nodes_delimiter_img(self) -> None:
         # TextNode("This is not a drill", "link", "https://www.google.com")
         node = TextNode("This is ![alt text for image](url/of/image.jpg) a drill", "image")
-        new_node = split_nodes_delimiter(node, node.text_Type)
+        new_node = split_nodes_delimiter(node)
         self.assertIsNotNone(new_node, print(new_node))
 
     def test_nodes_delimiter_header(self) -> None:
         node = TextNode("This is #not a drill", "header")
-        new_node = split_nodes_delimiter(node, node.text_Type)
+        new_node = split_nodes_delimiter(node)
         self.assertIsNotNone(new_node, print(new_node))
 
     def test_nodes_delimiter_unordered(self) -> None:
         node = TextNode("This is * notes a drill", "unordered")
-        new_node = split_nodes_delimiter(node, node.text_Type)
+        new_node = split_nodes_delimiter(node)
         self.assertIsNotNone(new_node, print(new_node))
 
     def test_nodes_delimiter_quotes(self) -> None:
         node = TextNode("This is > not a drill", "quotes")
-        new_node = split_nodes_delimiter(node, node.text_Type)
+        new_node = split_nodes_delimiter(node)
         self.assertIsNotNone(new_node, print(new_node))
 
     def test_nodes_delimiter_order(self) -> None:
         node = TextNode("This is 1. yesd a drill", "order")
-        new_node = split_nodes_delimiter(node, node.text_Type)
+        new_node = split_nodes_delimiter(node)
         self.assertIsNotNone(new_node, print(new_node))
 
 

@@ -1,4 +1,5 @@
 from htmlnode import LeafNode
+import re
 
 text_type_dict = {
     "text": None,
@@ -9,7 +10,6 @@ text_type_dict = {
     "image": "img"
 }
 delimiter_dict = {
-    "text": None,
     "bold": "**",
     "italic": "*",
     "code": "```",
@@ -21,41 +21,41 @@ delimiter_dict = {
     "order": ". "
 }
 
+delimiter_dict_pattern = {
+    #"text": r'(?<![`*])[a-zA-Z]+(?![`*])',
+    "bold": r'(?<!\*\s)\*\*([^\*]+)\*\*',  # **
+    "italic": r'(?<!\*\s)\*([^\*]+)\*(?!\*)',  # *
+    "code": r'```(.*?)```',  # ```
+    "link": r'\[(.*?)\]\((.*?)\)',  # [*](*)
+    "image": r'\!\[(.*?)\]\((.*?)\)',  # ![*](*)
+}
 
-def split_nodes_delimiter(old_node, text_Type) -> list:
+
+def split_nodes_delimiter(old_node) -> list:
     text_node_list = []
     string_builder = ""
-    delimiter_type = delimiter_dict[text_Type]
     temp_node = old_node.text.split(' ')
 
     if old_node.text is None:
         raise Exception("Invalid Markdown syntax")
 
-    if text_Type == "text" or type(old_node) is not TextNode:
-        return [TextNode(old_node.text, text_Type)]
+    if old_node.text_Type == "text":
+        return [TextNode(old_node.text, 'text', None)]
 
-    temp_string = ""
-    for word in old_node.text:
-
-        string_builder += word
-
-
-    print(string_builder)
-    print(old_node.text)
     print(temp_node)
+    delimiter_type = delimiter_dict[old_node.text_Type]
 
-    #for word in temp_node:
-    #    if delimiter_type in word:
-    #        if len(string_builder) != 0:
-    #            text_node_list.append(TextNode(string_builder, 'text'))
-    #            string_builder = ''
-#
-    #        text_node_list.append(TextNode(word.replace(delimiter_type, ""), text_Type))
-    #    else:
-    #        string_builder += word + " "
-#
-    #if len(string_builder) != 0:
-    #    text_node_list.append(TextNode(string_builder, 'text'))
+    for word in temp_node:
+        if delimiter_type in word:
+            if len(string_builder) != 0:
+                text_node_list.append(TextNode(string_builder, 'text'))
+                string_builder = ''
+                text_node_list.append(TextNode(word.replace(delimiter_type, ""), old_node.text_Type))
+        else:
+            string_builder += word + " "
+
+    if len(string_builder) != 0:
+        text_node_list.append(TextNode(string_builder, 'text'))
 
     return text_node_list
 
