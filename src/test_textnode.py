@@ -59,7 +59,14 @@ class TestTextNode(unittest.TestCase):
         self.assertIsNotNone(new_node, print(new_node))
 
     def test_nodes_delimiter_link(self) -> None:
-        node = TextNode("This is [link](www.google.com) a drill", "link")
+        #TextNode("This is not a drill", "link", "https://www.google.com")
+        node = TextNode("This is [here sdfa](www.google.com) a drill", "link")
+        new_node = split_nodes_delimiter(node, node.text_Type)
+        self.assertIsNotNone(new_node, print(new_node))
+
+    def test_nodes_delimiter_img(self) -> None:
+        #TextNode("This is not a drill", "link", "https://www.google.com")
+        node = TextNode("This is ![alt text for image](url/of/image.jpg) a drill", "image")
         new_node = split_nodes_delimiter(node, node.text_Type)
         self.assertIsNotNone(new_node, print(new_node))
 
