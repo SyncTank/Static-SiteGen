@@ -46,9 +46,14 @@ def split_nodes_delimiter(old_node) -> list:
     if old_node.text_Type == "text":
         return [TextNode(old_node.text, 'text', None)]
 
+    text_node_list = []
+    buffer_list = {}
+    sent_length = len(temp3)
+
+    print(temp3)
+
     for key, value in delimiter_dict_pattern.items():
         found_match = re.findall(delimiter_dict_pattern[key], temp3)
-        position_match = re.search(delimiter_dict_pattern[key], temp3)
         if bool(found_match):
             buffer_list[f'{key}'] = found_match
 
@@ -66,6 +71,26 @@ def split_nodes_delimiter(old_node) -> list:
     sort_text_obj = dict(sorted(text_obj.items()))
 
     print(sort_text_obj)
+    print()
+    print(temp3, sent_length)
+
+    index = 0
+    for key, value in sort_text_obj.items():
+        displacement_key = len(delimiter_dict[value[0]])
+        if len(text_node_list) < 1 or index < key:
+            text_node_list.append(temp3[index:key - displacement_key])
+            index = key
+
+        if index < key + len(value[1]):
+            print(key, index, key + len(value[1]), value[1], len(value[1]), temp3[key: key + len(value[1])])
+            print()
+            text_node_list.append(temp3[key: key + len(value[1])])
+            index = key + len(value[1]) + displacement_key
+
+        if key == list(sort_text_obj)[-1]:
+            text_node_list.append(temp3[index:])
+
+    print(text_node_list)
 
     #print(temp_node)
     #delimiter_type = delimiter_dict[old_node.text_Type]
