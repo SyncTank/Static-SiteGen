@@ -44,11 +44,11 @@ def split_nodes_delimiter(old_node) -> list:
         return [TextNode(old_node.text, 'text', None)]
 
     for key, value in delimiter_dict_pattern.items():
-        found_match = re.findall(delimiter_dict_pattern[key], old_node.text)
+        found_match = re.finditer(delimiter_dict_pattern[key], old_node.text)
         position_match = re.search(delimiter_dict_pattern[key], old_node.text)
 
         if bool(found_match):
-            print(True, found_match, key)
+            #print(True, found_match, key)
             #print(found_match)
             buffer_list.append([found_match, key])
 
