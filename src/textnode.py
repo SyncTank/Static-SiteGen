@@ -33,6 +33,7 @@ delimiter_dict_pattern = {
 
 def split_nodes_delimiter(old_node) -> list:
     text_node_list = []
+    buffer_list = []
     string_builder = ""
     temp_node = old_node.text.split(' ')
 
@@ -42,20 +43,31 @@ def split_nodes_delimiter(old_node) -> list:
     if old_node.text_Type == "text":
         return [TextNode(old_node.text, 'text', None)]
 
-    print(temp_node)
-    delimiter_type = delimiter_dict[old_node.text_Type]
+    for key, value in delimiter_dict_pattern.items():
+        found_match = re.findall(delimiter_dict_pattern[key], old_node.text)
+        position_match = re.search(delimiter_dict_pattern[key], old_node.text)
 
-    for word in temp_node:
-        if delimiter_type in word:
-            if len(string_builder) != 0:
-                text_node_list.append(TextNode(string_builder, 'text'))
-                string_builder = ''
-                text_node_list.append(TextNode(word.replace(delimiter_type, ""), old_node.text_Type))
-        else:
-            string_builder += word + " "
+        if bool(found_match):
+            print(True, found_match, key)
+            #print(found_match)
+            buffer_list.append([found_match, key])
 
-    if len(string_builder) != 0:
-        text_node_list.append(TextNode(string_builder, 'text'))
+    print(buffer_list)
+
+    #print(temp_node)
+    #delimiter_type = delimiter_dict[old_node.text_Type]
+#
+    #for word in temp_node:
+    #    if delimiter_type in word:
+    #        if len(string_builder) != 0:
+    #            text_node_list.append(TextNode(string_builder, 'text'))
+    #            string_builder = ''
+    #            text_node_list.append(TextNode(word.replace(delimiter_type, ""), old_node.text_Type))
+    #    else:
+    #        string_builder += word + " "
+#
+    #if len(string_builder) != 0:
+    #    text_node_list.append(TextNode(string_builder, 'text'))
 
     return text_node_list
 
