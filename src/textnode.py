@@ -64,7 +64,7 @@ def split_nodes_delimiter(old_node) -> list:
             for sub in buffer_list[item]:
                 text_obj[temp3.index(sub)] = (item, sub)
         else:
-            obj_key = temp3.index((buffer_list[item][0]))
+            obj_key = temp3.index((buffer_list[item][0]))  # link / images
             obj_value = buffer_list[item][0]
             text_obj[obj_key] = (item, obj_value)
 
@@ -79,15 +79,18 @@ def split_nodes_delimiter(old_node) -> list:
         displacement_key = len(delimiter_dict[value[0]])
         if len(text_node_list) < 1 or index < key:
             text_node_list.append(temp3[index:key - displacement_key])
+            # text_node_list.append(TextNode(temp3[index:key - displacement_key], 'text'))
             index = key
 
         if index < key + len(value[1]):
             print(key, index, key + len(value[1]), value[1], len(value[1]), temp3[key: key + len(value[1])])
             print()
             text_node_list.append(temp3[key: key + len(value[1])])
+            # text_node_list.append(TextNode(temp3[key: key + len(value[1])], value[0]))
             index = key + len(value[1]) + displacement_key
 
         if key == list(sort_text_obj)[-1]:
+            # text_node_list.append(TextNode(temp3[index:], 'text'))
             text_node_list.append(temp3[index:])
 
     print(text_node_list)
