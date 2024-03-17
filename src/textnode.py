@@ -33,9 +33,12 @@ delimiter_dict_pattern = {
 
 def split_nodes_delimiter(old_node) -> list:
     text_node_list = []
-    buffer_list = []
+    buffer_list = {}
     string_builder = ""
     temp_node = old_node.text.split(' ')
+    temp3 = old_node.text
+
+    print(temp3)
 
     if old_node.text is None:
         raise Exception("Invalid Markdown syntax")
@@ -44,15 +47,25 @@ def split_nodes_delimiter(old_node) -> list:
         return [TextNode(old_node.text, 'text', None)]
 
     for key, value in delimiter_dict_pattern.items():
-        found_match = re.finditer(delimiter_dict_pattern[key], old_node.text)
-        position_match = re.search(delimiter_dict_pattern[key], old_node.text)
-
+        found_match = re.findall(delimiter_dict_pattern[key], temp3)
+        position_match = re.search(delimiter_dict_pattern[key], temp3)
         if bool(found_match):
-            #print(True, found_match, key)
-            #print(found_match)
-            buffer_list.append([found_match, key])
+            buffer_list[f'{key}'] = found_match
 
     print(buffer_list)
+    text_obj = {}
+    for item in buffer_list:
+        if len(buffer_list[item]) > 1:
+            for sub in buffer_list[item]:
+                text_obj[temp3.index(sub)] = (item, sub)
+        else:
+            obj_key = temp3.index((buffer_list[item][0]))
+            obj_value = buffer_list[item][0]
+            text_obj[obj_key] = (item, obj_value)
+
+    sort_text_obj = dict(sorted(text_obj.items()))
+
+    print(sort_text_obj)
 
     #print(temp_node)
     #delimiter_type = delimiter_dict[old_node.text_Type]
