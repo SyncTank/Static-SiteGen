@@ -64,7 +64,7 @@ def split_nodes_delimiter(old_node) -> list:
             for sub in buffer_list[item]:
                 text_obj[temp3.index(sub)] = (item, sub)
         else:
-            obj_key = temp3.index((buffer_list[item][0]))  # link / images
+            obj_key = temp3.index((buffer_list[item][0]))  # link / images do a double
             obj_value = buffer_list[item][0]
             text_obj[obj_key] = (item, obj_value)
 
