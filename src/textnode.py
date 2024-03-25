@@ -9,6 +9,8 @@ text_type_dict = {
     "link": "a",
     "image": "img"
 }
+
+
 delimiter_dict = {
     "bold": "**",
     "italic": "*",
@@ -22,23 +24,35 @@ delimiter_dict = {
 }
 
 delimiter_dict_pattern = {
-    #"text": r'(?<![`*])[a-zA-Z]+(?![`*])',
-    "bold": r'(?<!\*\s)\*\*([^\*]+)\*\*',  # **
-    "italic": r'(?<!\*\s)\*([^\*]+)\*(?!\*)',  # *
-    "code": r'```(.*?)```',  # ```
-    "link": r'\[(.*?)\]\((.*?)\)',  # [*](*)
-    "image": r'\!\[(.*?)\]\((.*?)\)',  # ![*](*)
-}
+    "bold": r'(?<!\*)\*\*([^\*]+)\*\*',  # **
+    "italic": r'(?<!\*)\*([^\*]+)\*(?!\*)',  # *
+    "code": r'`(.*?)`',  # ```
+    "link": r'\s\[(.*?)\]\((.*?)\)',  # [*](*)
+    "image": r'!\[(.*?)\]\((.*?)\)',  # ![*](*)
+} # Pattern for header | ordered | unordered | quotes needed
+
+
+def match_reg(reg: str, sent: str, type_reg: str, matches=None):
+    if matches is None:
+        matches = []
+    found_match = re.search(reg, sent)
+    if bool(found_match):
+        start_index, end_index = found_match.span()
+        matches.append((start_index, end_index, found_match.group(), type_reg))
+        new_sent = sent[:start_index] + len(sent[start_index:end_index]) * " " + sent[end_index:]
+        match_reg(reg, new_sent, type_reg, matches)
+    else:
+        return None
+    return matches
 
 
 def split_nodes_delimiter(old_node) -> list:
     text_node_list = []
-    buffer_list = {}
+    buffer_list = []
+    temp_buffer_list = []
+    long_buffer = []
+    string_copy = old_node.text
     string_builder = ""
-    temp_node = old_node.text.split(' ')
-    temp3 = old_node.text
-
-    print(temp3)
 
     if old_node.text is None:
         raise Exception("Invalid Markdown syntax")
@@ -46,69 +60,48 @@ def split_nodes_delimiter(old_node) -> list:
     if old_node.text_Type == "text":
         return [TextNode(old_node.text, 'text', None)]
 
-    text_node_list = []
-    buffer_list = {}
-    sent_length = len(temp3)
+    for limit in delimiter_dict_pattern:
+        temp_buffer_list.append(match_reg(delimiter_dict_pattern[limit], string_copy, limit))
 
-    print(temp3)
+    for item in temp_buffer_list:
+        if item:
+            buffer_list.append(item)
 
-    for key, value in delimiter_dict_pattern.items():
-        found_match = re.findall(delimiter_dict_pattern[key], temp3)
-        if bool(found_match):
-            buffer_list[f'{key}'] = found_match
+    sort_buffer = sorted(buffer_list)
 
-    print(buffer_list)
-    text_obj = {}
-    for item in buffer_list:
-        if len(buffer_list[item]) > 1:
-            for sub in buffer_list[item]:
-                text_obj[temp3.index(sub)] = (item, sub)
+    for items in sort_buffer:
+        for item in items:
+            long_buffer.append(item)
+
+    counter_buffer = 0
+    for i, v in enumerate(string_copy):
+        if i == long_buffer[counter_buffer][0]:
+            if len(string_builder) != 0:
+                text_node_list.append(TextNode(string_builder, "text"))
+                string_builder = ""
+
+            slice_setter = long_buffer[counter_buffer]
+            if long_buffer[counter_buffer][3] == 'italic' or long_buffer[counter_buffer][3] == 'code':
+                text_node_list.append(TextNode(string_copy[slice_setter[0] + 1:slice_setter[1] - 1], slice_setter[3]))
+            elif long_buffer[counter_buffer][3] == 'bold':
+                text_node_list.append(TextNode(string_copy[slice_setter[0] + 2:slice_setter[1] - 2], slice_setter[3]))
+            elif long_buffer[counter_buffer][3] == 'image':
+                image_text = long_buffer[counter_buffer][2][2:-1]
+                image_buffer = image_text.split("](")
+                text_node_list.append(TextNode(image_buffer[0], slice_setter[3], image_buffer[1]))
+            elif long_buffer[counter_buffer][3] == 'link':
+                link_text = long_buffer[counter_buffer][2][2:-1]
+                link_buffer = link_text.split("](")
+                text_node_list.append(TextNode(link_buffer[0], slice_setter[3], link_buffer[1]))
         else:
-            obj_key = temp3.index((buffer_list[item][0]))  # link / images do a double
-            obj_value = buffer_list[item][0]
-            text_obj[obj_key] = (item, obj_value)
+            if i < long_buffer[counter_buffer][0] or i > long_buffer[counter_buffer][1]:
+                string_builder += v
+        if i == long_buffer[counter_buffer][1] and len(long_buffer) - 1 > counter_buffer:
+            counter_buffer += 1
 
-    sort_text_obj = dict(sorted(text_obj.items()))
-
-    print(sort_text_obj)
-    print()
-    print(temp3, sent_length)
-
-    index = 0
-    for key, value in sort_text_obj.items():
-        displacement_key = len(delimiter_dict[value[0]])
-        if len(text_node_list) < 1 or index < key:
-            text_node_list.append(temp3[index:key - displacement_key])
-            # text_node_list.append(TextNode(temp3[index:key - displacement_key], 'text'))
-            index = key
-
-        if index < key + len(value[1]):
-            print(key, index, key + len(value[1]), value[1], len(value[1]), temp3[key: key + len(value[1])])
-            print()
-            text_node_list.append(temp3[key: key + len(value[1])])
-            # text_node_list.append(TextNode(temp3[key: key + len(value[1])], value[0]))
-            index = key + len(value[1]) + displacement_key
-
-        if key == list(sort_text_obj)[-1]:
-            # text_node_list.append(TextNode(temp3[index:], 'text'))
-            text_node_list.append(temp3[index:])
-
-    print(text_node_list)
-
-    #print(temp_node)
-    #delimiter_type = delimiter_dict[old_node.text_Type]
-#
-    #for word in temp_node:
-    #    if delimiter_type in word:
-    #        if len(string_builder) != 0:
-    #            text_node_list.append(TextNode(string_builder, 'text'))
-    #            string_builder = ''
-    #            text_node_list.append(TextNode(word.replace(delimiter_type, ""), old_node.text_Type))
-    #    else:
-    #        string_builder += word + " "
-#
-    #if len(string_builder) != 0:
-    #    text_node_list.append(TextNode(string_builder, 'text'))
+    if len(string_copy) > long_buffer[counter_buffer][1]:
+        final_text = long_buffer[counter_buffer][1]
+        text_node_list.append(TextNode(string_copy[final_text:], "text"))
 
     return text_node_list
 
