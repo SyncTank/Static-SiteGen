@@ -1,6 +1,6 @@
 import unittest
 
-from textnode import TextNode, split_nodes_delimiter
+from textnode import TextNode, inline_markdown_capture
 
 
 class TestTextNode(unittest.TestCase):
@@ -41,57 +41,60 @@ class TestTextNode(unittest.TestCase):
 
     def test_nodes_delimiter_text(self) -> None:
         node = TextNode("This is not a drill", "text")
-        new_node = split_nodes_delimiter(node)
+        new_node = inline_markdown_capture(node)
         self.assertIsNotNone(new_node, print(new_node))
 
     def test_nodes_delimiter_bold(self) -> None:
         node = TextNode("This is **not** a drill", "bold")
-        new_node = split_nodes_delimiter(node)
+        new_node = inline_markdown_capture(node)
         self.assertIsNotNone(new_node, print(new_node))
 
     def test_nodes_delimiter_italic(self) -> None:
         node = TextNode("This is *not* a drill", "italic")
-        new_node = split_nodes_delimiter(node)
+        new_node = inline_markdown_capture(node)
         self.assertIsNotNone(new_node, print(new_node))
 
     def test_nodes_delimiter_double_italic(self) -> None:
         node = TextNode("This is *not* a *drill* test", "italic")
-        new_node = split_nodes_delimiter(node)
+        new_node = inline_markdown_capture(node)
         self.assertIsNotNone(new_node, print(new_node))
 
     def test_nodes_delimiter_code(self) -> None:
         node = TextNode("This is `not` a `drill` test", "code")
-        new_node = split_nodes_delimiter(node)
+        new_node = inline_markdown_capture(node)
         self.assertIsNotNone(new_node, print(new_node))
 
     def test_nodes_delimiter_two_types(self) -> None:
         node = TextNode("This is *not* a `drill` test", "italic")
-        new_node = split_nodes_delimiter(node)
+        new_node = inline_markdown_capture(node)
         self.assertIsNotNone(new_node, print(new_node))
 
     def test_nodes_delimiter_link(self) -> None: # review
         node = TextNode("This is [here sdfa](www.google.com) a drill", "link")
-        new_node = split_nodes_delimiter(node)
+        new_node = inline_markdown_capture(node)
         self.assertIsNotNone(new_node, print(new_node))
 
     def test_nodes_delimiter_link_italic(self) -> None: # review
         node = TextNode("This is [here sdfa](www.google.com) *a* drill", "link")
-        new_node = split_nodes_delimiter(node)
+        new_node = inline_markdown_capture(node)
         self.assertIsNotNone(new_node, print(new_node))
 
     def test_nodes_delimiter_img(self) -> None:
         node = TextNode("This `is` ![alt text for image](url/of/image.jpg) a drill", "image")
-        new_node = split_nodes_delimiter(node)
+        new_node = inline_markdown_capture(node)
         self.assertIsNotNone(new_node, print(new_node))
 
     def test_nodes_delimiter_final(self) -> None:
         node = TextNode("This is **text** with an *italic* word and a `code block` and an ![image](https://i.imgur.com/zjjcJKZ.png) and a [link](https://boot.dev)", "image")
-        new_node = split_nodes_delimiter(node)
+        new_node = inline_markdown_capture(node)
         self.assertIsNotNone(new_node, print(new_node))
 
     def test_nodes_delimiter_final_comp(self) -> None:
         node = TextNode("This is **text** with an *italic* word and a `code block` and an ![image here is](https://i.imgur.com/zjjcJKZ.png) and a [new link founded](https://boot.dev)", "image")
-        new_node = split_nodes_delimiter(node)
+        new_node = inline_markdown_capture(node)
+        for item in new_node:
+            print(item)
+        print()
         self.assertIsNotNone(new_node, print(new_node))
 
 

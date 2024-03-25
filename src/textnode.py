@@ -45,7 +45,7 @@ def match_reg(reg: str, sent: str, type_reg: str, matches=None):
     return matches
 
 
-def split_nodes_delimiter(old_node) -> list:
+def inline_markdown_capture(old_node) -> list:
     text_node_list = []
     buffer_list = []
     temp_buffer_list = []
