@@ -84,6 +84,16 @@ class TestTextNode(unittest.TestCase):
         new_node = split_nodes_delimiter(node)
         self.assertIsNotNone(new_node, print(new_node))
 
+    def test_nodes_delimiter_final(self) -> None:
+        node = TextNode("This is **text** with an *italic* word and a `code block` and an ![image](https://i.imgur.com/zjjcJKZ.png) and a [link](https://boot.dev)", "image")
+        new_node = split_nodes_delimiter(node)
+        self.assertIsNotNone(new_node, print(new_node))
+
+    def test_nodes_delimiter_final_comp(self) -> None:
+        node = TextNode("This is **text** with an *italic* word and a `code block` and an ![image here is](https://i.imgur.com/zjjcJKZ.png) and a [new link founded](https://boot.dev)", "image")
+        new_node = split_nodes_delimiter(node)
+        self.assertIsNotNone(new_node, print(new_node))
+
 
 if __name__ == "__main__":
     unittest.main()

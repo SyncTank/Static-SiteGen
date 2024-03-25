@@ -10,7 +10,6 @@ text_type_dict = {
     "image": "img"
 }
 
-
 delimiter_dict = {
     "bold": "**",
     "italic": "*",
@@ -29,7 +28,7 @@ delimiter_dict_pattern = {
     "code": r'`(.*?)`',  # ```
     "link": r'\s\[(.*?)\]\((.*?)\)',  # [*](*)
     "image": r'!\[(.*?)\]\((.*?)\)',  # ![*](*)
-} # Pattern for header | ordered | unordered | quotes needed
+}  # Pattern for header | ordered | unordered | quotes needed
 
 
 def match_reg(reg: str, sent: str, type_reg: str, matches=None):
@@ -58,7 +57,7 @@ def split_nodes_delimiter(old_node) -> list:
         raise Exception("Invalid Markdown syntax")
 
     if old_node.text_Type == "text":
-        return [TextNode(old_node.text, 'text', None)]
+        return [TextNode(old_node.text, 'text', None)]  # Careful for TextNode Tag on Text
 
     for limit in delimiter_dict_pattern:
         temp_buffer_list.append(match_reg(delimiter_dict_pattern[limit], string_copy, limit))
