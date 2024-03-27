@@ -31,7 +31,12 @@ inline_delimiter_dict_pattern = {
 }
 
 block_delimiter_dict_pattern = {
-    "unordered": r'\n(\*\s\w+.*)',  # Add \n for newline logic on regex
+    "paragraph": r'',  # Just text
+    "heading": r'',  # (1-6 number of # words)
+    "code": r'',  # ``` words ```
+    "quote": r'',  # > words
+    "unordered": r'\n(\*\s\w+.*)',  # * or - words
+    "ordered": r'',  # 1. words
 }
 
 
