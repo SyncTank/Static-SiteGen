@@ -30,6 +30,10 @@ inline_delimiter_dict_pattern = {
     "image": r'!\[(.*?)\]\((.*?)\)',  # ![*](*)
 }
 
+block_delimiter_dict_pattern = {
+    "unordered": r'\n(\*\s\w+.*)',  # Add \n for newline logic on regex
+}
+
 
 def match_reg(reg: str, sent: str, type_reg: str, matches=None):
     if matches is None:
@@ -105,8 +109,15 @@ def inline_markdown_capture(old_node) -> list:
     return text_node_list
 
 
-def block_markdown(markdown):
-    pass
+def markdown_block(markdown):
+    print(markdown)
+    print()
+    print(markdown.split('\n'))
+
+    for i, v in enumerate(markdown.split('\n')):
+        print(i, v, re.search(block_delimiter_dict_pattern['unordered'], v))
+        if re.match(block_delimiter_dict_pattern['unordered'], v):
+            print("yes")
 
 
 class TextNode:

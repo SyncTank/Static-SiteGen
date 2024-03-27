@@ -69,12 +69,12 @@ class TestTextNode(unittest.TestCase):
         new_node = inline_markdown_capture(node)
         self.assertIsNotNone(new_node, print(new_node))
 
-    def test_nodes_delimiter_link(self) -> None: # review
+    def test_nodes_delimiter_link(self) -> None:  # review
         node = TextNode("This is [here sdfa](www.google.com) a drill", "link")
         new_node = inline_markdown_capture(node)
         self.assertIsNotNone(new_node, print(new_node))
 
-    def test_nodes_delimiter_link_italic(self) -> None: # review
+    def test_nodes_delimiter_link_italic(self) -> None:  # review
         node = TextNode("This is [here sdfa](www.google.com) *a* drill", "link")
         new_node = inline_markdown_capture(node)
         self.assertIsNotNone(new_node, print(new_node))
@@ -85,17 +85,42 @@ class TestTextNode(unittest.TestCase):
         self.assertIsNotNone(new_node, print(new_node))
 
     def test_nodes_delimiter_final(self) -> None:
-        node = TextNode("This is **text** with an *italic* word and a `code block` and an ![image](https://i.imgur.com/zjjcJKZ.png) and a [link](https://boot.dev)", "image")
+        node = TextNode(
+            "This is **text** with an *italic* word and a `code block` and an ![image](https://i.imgur.com/zjjcJKZ.png) and a [link](https://boot.dev)",
+            "image")
         new_node = inline_markdown_capture(node)
         self.assertIsNotNone(new_node, print(new_node))
 
     def test_nodes_delimiter_final_comp(self) -> None:
-        node = TextNode("This is **text** with an *italic* word and a `code block` and an ![image here is](https://i.imgur.com/zjjcJKZ.png) and a [new link founded](https://boot.dev)", "image")
+        node = TextNode(
+            "This is **text** with an *italic* word and a `code block` and an ![image here is](https://i.imgur.com/zjjcJKZ.png) and a [new link founded](https://boot.dev)",
+            "image")
         new_node = inline_markdown_capture(node)
         for item in new_node:
             print(item)
         print()
         self.assertIsNotNone(new_node, print(new_node))
+
+    def test_node_markdown_delimit_pattern(self) -> None:
+        block = ("""
+                 # This is a heading
+
+                 This is a paragraph of text. It has some **bold** and *italic* words inside of it.
+
+                 * This is a list item
+                 * This is another list item
+                 """)
+
+    def test_node_markdown_delimit_pattern_two(self) -> None:
+        block = ("""
+                This is **bolded** paragraph
+
+                This is another paragraph with *italic* text and `code` here
+                This is the same paragraph on a new line
+
+                * This is a list
+                * with items
+                 """)
 
 
 if __name__ == "__main__":
