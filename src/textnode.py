@@ -114,7 +114,8 @@ def inline_markdown_capture(old_node) -> list:
     return text_node_list
 
 
-def markdown_block(markdown):
+def markdown_block(markdown) -> list:
+    text_block = []
     print(markdown)
     print()
     print(markdown.split('\n'))
@@ -123,6 +124,8 @@ def markdown_block(markdown):
         print(i, v, re.search(block_delimiter_dict_pattern['unordered'], v))
         if re.match(block_delimiter_dict_pattern['unordered'], v):
             print("yes")
+
+    return text_block
 
 
 class TextNode:
