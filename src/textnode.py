@@ -22,13 +22,13 @@ delimiter_dict = {
     "order": ". "
 }
 
-delimiter_dict_pattern = {
+inline_delimiter_dict_pattern = {
     "bold": r'(?<!\*)\*\*([^\*]+)\*\*',  # **
     "italic": r'(?<!\*)\*([^\*]+)\*(?!\*)',  # *
     "code": r'`(.*?)`',  # ```
     "link": r'\s\[(.*?)\]\((.*?)\)',  # [*](*)
     "image": r'!\[(.*?)\]\((.*?)\)',  # ![*](*)
-}  # Pattern for header | ordered | unordered | quotes needed
+}
 
 
 def match_reg(reg: str, sent: str, type_reg: str, matches=None):
@@ -59,8 +59,8 @@ def inline_markdown_capture(old_node) -> list:
     if old_node.text_Type == "text":
         return [TextNode(old_node.text, 'text', None)]  # Careful for TextNode Tag on Text
 
-    for limit in delimiter_dict_pattern:
-        temp_buffer_list.append(match_reg(delimiter_dict_pattern[limit], string_copy, limit))
+    for limit in inline_delimiter_dict_pattern:
+        temp_buffer_list.append(match_reg(inline_delimiter_dict_pattern[limit], string_copy, limit))
 
     for item in temp_buffer_list:
         if item:
@@ -103,6 +103,10 @@ def inline_markdown_capture(old_node) -> list:
         text_node_list.append(TextNode(string_copy[final_text:], "text"))
 
     return text_node_list
+
+
+def block_markdown(markdown):
+    pass
 
 
 class TextNode:
