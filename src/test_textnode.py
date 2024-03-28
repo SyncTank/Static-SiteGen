@@ -40,61 +40,57 @@ class TestTextNode(unittest.TestCase):
         self.assertIsNotNone(node.text_node_to_html_node(), print(node.text_node_to_html_node()))
 
     def test_nodes_delimiter_text(self) -> None:
-        node = TextNode("This is not a drill", "text")
-        new_node = inline_markdown_capture(node)
+        node = "This is not a drill"
+        new_node = inline_markdown_capture(node, "text")
         self.assertIsNotNone(new_node, print(new_node))
 
     def test_nodes_delimiter_bold(self) -> None:
-        node = TextNode("This is **not** a drill", "bold")
+        node = "This is **not** a drill"
         new_node = inline_markdown_capture(node)
         self.assertIsNotNone(new_node, print(new_node))
 
     def test_nodes_delimiter_italic(self) -> None:
-        node = TextNode("This is *not* a drill", "italic")
+        node = "This is *not* a drill"
         new_node = inline_markdown_capture(node)
         self.assertIsNotNone(new_node, print(new_node))
 
     def test_nodes_delimiter_double_italic(self) -> None:
-        node = TextNode("This is *not* a *drill* test", "italic")
+        node = "This is *not* a *drill* test"
         new_node = inline_markdown_capture(node)
         self.assertIsNotNone(new_node, print(new_node))
 
     def test_nodes_delimiter_code(self) -> None:
-        node = TextNode("This is `not` a `drill` test", "code")
+        node = "This is `not` a `drill` test"
         new_node = inline_markdown_capture(node)
         self.assertIsNotNone(new_node, print(new_node))
 
     def test_nodes_delimiter_two_types(self) -> None:
-        node = TextNode("This is *not* a `drill` test", "italic")
+        node = "This is *not* a `drill` test"
         new_node = inline_markdown_capture(node)
         self.assertIsNotNone(new_node, print(new_node))
 
     def test_nodes_delimiter_link(self) -> None:  # review
-        node = TextNode("This is [here sdfa](www.google.com) a drill", "link")
+        node = "This is [here sdfa](www.google.com) a drill"
         new_node = inline_markdown_capture(node)
         self.assertIsNotNone(new_node, print(new_node))
 
     def test_nodes_delimiter_link_italic(self) -> None:  # review
-        node = TextNode("This is [here sdfa](www.google.com) *a* drill", "link")
+        node = "This is [here sdfa](www.google.com) *a* drill"
         new_node = inline_markdown_capture(node)
         self.assertIsNotNone(new_node, print(new_node))
 
     def test_nodes_delimiter_img(self) -> None:
-        node = TextNode("This `is` ![alt text for image](url/of/image.jpg) a drill", "image")
+        node = "This `is` ![alt text for image](url/of/image.jpg) a drill"
         new_node = inline_markdown_capture(node)
         self.assertIsNotNone(new_node, print(new_node))
 
     def test_nodes_delimiter_final(self) -> None:
-        node = TextNode(
-            "This is **text** with an *italic* word and a `code block` and an ![image](https://i.imgur.com/zjjcJKZ.png) and a [link](https://boot.dev)",
-            "image")
+        node =  "This is **text** with an *italic* word and a `code block` and an ![image](https://i.imgur.com/zjjcJKZ.png) and a [link](https://boot.dev)"
         new_node = inline_markdown_capture(node)
         self.assertIsNotNone(new_node, print(new_node))
 
     def test_nodes_delimiter_final_comp(self) -> None:
-        node = TextNode(
-            "This is **text** with an *italic* word and a `code block` and an ![image here is](https://i.imgur.com/zjjcJKZ.png) and a [new link founded](https://boot.dev)",
-            "image")
+        node = "This is **text** with an *italic* word and a `code block` and an ![image here is](https://i.imgur.com/zjjcJKZ.png) and a [new link founded](https://boot.dev)"
         new_node = inline_markdown_capture(node)
         for item in new_node:
             print(item)
@@ -117,6 +113,14 @@ class TestTextNode(unittest.TestCase):
 
                 This is another paragraph with *italic* text and `code` here
                 This is the same paragraph on a new line
+                
+                ```
+                print("heel")
+                console.log("hello");
+                std::cout << "hello" << std::endl;
+                system.println("hello");
+                ```
+                
 
                 * This is a list
                 * with items

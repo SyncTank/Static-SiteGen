@@ -31,12 +31,12 @@ inline_delimiter_dict_pattern = {
 }
 
 block_delimiter_dict_pattern = {
-    "paragraph": r'',  # Just text
-    "heading": r'',  # (1-6 number of # words)
-    "code": r'',  # ``` words ```
-    "quote": r'',  # > words
-    "unordered": r'^\s*\*\s*(.*)',  # * or - words
-    "ordered": r'',  # 1. words
+    "paragraph": r'^[A-Za-z\s]*$',  # Just text
+    "heading": r'^\s*[\#]\s*(.*)',  # (1-6 number of # words)
+    "code": r'```([\s\S]*?)```',  # ``` words ```
+    "quote": r'^\s*[\>]\s*(.*)',  # > words
+    "unordered": r'^\s*[\*-]\s*(.*)',  # * or - words
+    "ordered": r'^\s*[\d]\s*(.*)',  # 1. words
 }
 
 
@@ -54,19 +54,19 @@ def match_reg(reg: str, sent: str, type_reg: str, matches=None):
     return matches
 
 
-def inline_markdown_capture(old_node) -> list:
+def inline_markdown_capture(old_node, old_node_type=None) -> list:
     text_node_list = []
     buffer_list = []
     temp_buffer_list = []
     long_buffer = []
-    string_copy = old_node.text
+    string_copy = old_node
     string_builder = ""
 
-    if old_node.text is None:
+    if old_node is None:
         raise Exception("Invalid Markdown syntax")
 
-    if old_node.text_Type == "text":
-        return [TextNode(old_node.text, 'text', None)]  # Careful for TextNode Tag on Text
+    if old_node_type == "text":
+        return [TextNode(old_node, 'text', None)]  # Careful for TextNode Tag on Text
 
     for limit in inline_delimiter_dict_pattern:
         temp_buffer_list.append(match_reg(inline_delimiter_dict_pattern[limit], string_copy, limit))
@@ -118,32 +118,38 @@ def markdown_block(markdown) -> list:
     text_nodes_final = []
     mark_buffer = markdown.split('\n')
     temp_buffer = []
+    text = []
+    text_inline = []
     text_blocks = []
 
     for item in mark_buffer:
-        if not item.isspace() and item is not '':
+        if not item.isspace() and item != '':
             temp_buffer.append(item.strip().rstrip())
 
-    print(temp_buffer)
+    string_builder = ""
+    capturing = False
+    for item in temp_buffer:
+        if item == '```':
+            capturing = not capturing
+            if len(string_builder) > 0:
+                string_builder += '```'
+                text.append(string_builder)
+        if capturing:
+            string_builder += item + '\n'
+        elif not capturing and item != '```':
+            text.append(item)
 
-    for i, v in enumerate(temp_buffer):
-        print(i, v, re.search(block_delimiter_dict_pattern['unordered'], v))
-        text_blocks.append(i)
+    for i, v in enumerate(text):
+        print(i, v)
 
-    if len(temp_buffer) == 0:
-        for item in temp_buffer:
-            text_nodes_final.append(inline_markdown_capture(item))
-    else:
-        counter = 0
-        for i, v in enumerate(temp_buffer):
-            if i == temp_buffer[counter]:
-                counter += 1
-                for limiter in block_delimiter_dict_pattern:
-                    re.search(block_delimiter_dict_pattern[limiter], v)
-            else:
-                for item in temp_buffer:
-                    text_nodes_final.append(inline_markdown_capture(item))
+    # for i, v in enumerate(temp_buffer):
+    #     text_match = re.search(block_delimiter_dict_pattern["paragraph"], v)
+    #     if bool(text_match):
+    #         text.append((i, v))
+    #     else:
+    #         text_inline.append((i, v))
 
+    print(text_inline)
 
     return text_nodes_final
 
