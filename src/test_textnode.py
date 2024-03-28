@@ -44,6 +44,11 @@ class TestTextNode(unittest.TestCase):
         new_node = inline_markdown_capture(node, "text")
         self.assertIsNotNone(new_node, print(new_node))
 
+    def test_nodes_delimiter_TextNode(self) -> None:
+        node = TextNode("This is not a drill", "text", None)
+        new_node = inline_markdown_capture(node, "text")
+        self.assertIsNotNone(new_node, print(new_node))
+
     def test_nodes_delimiter_bold(self) -> None:
         node = "This is **not** a drill"
         new_node = inline_markdown_capture(node)

@@ -25,7 +25,7 @@ delimiter_dict = {
 inline_delimiter_dict_pattern = {
     "bold": r'(?<!\*)\*\*([^\*]+)\*\*',  # **
     "italic": r'(?<!\*)\*([^\*]+)\*(?!\*)',  # *
-    "code": r'`(.*?)`',  # ```
+    "code": r'`(.*?)`',  # `
     "link": r'\s\[(.*?)\]\((.*?)\)',  # [*](*)
     "image": r'!\[(.*?)\]\((.*?)\)',  # ![*](*)
 }
@@ -67,6 +67,9 @@ def inline_markdown_capture(old_node, old_node_type=None) -> list:
 
     if old_node_type == "text":
         return [TextNode(old_node, 'text', None)]  # Careful for TextNode Tag on Text
+
+    if old_node is TextNode:
+        return old_node
 
     for limit in inline_delimiter_dict_pattern:
         temp_buffer_list.append(match_reg(inline_delimiter_dict_pattern[limit], string_copy, limit))
@@ -135,21 +138,23 @@ def markdown_block(markdown) -> list:
                 string_builder += '```'
                 text.append(string_builder)
         if capturing:
-            string_builder += item + '\n'
+            string_builder += item + "\n"
         elif not capturing and item != '```':
             text.append(item)
 
+    temp_buffer = []
     for i, v in enumerate(text):
+        text_match = re.search(block_delimiter_dict_pattern["paragraph"], v)
+        print(i, v, bool(text_match))
+        if bool(text_match):
+            temp_buffer.append(inline_markdown_capture(v, "text"))
+        else:
+            temp_buffer.append(v)
+
+    print()
+
+    for i, v in enumerate(temp_buffer):
         print(i, v)
-
-    # for i, v in enumerate(temp_buffer):
-    #     text_match = re.search(block_delimiter_dict_pattern["paragraph"], v)
-    #     if bool(text_match):
-    #         text.append((i, v))
-    #     else:
-    #         text_inline.append((i, v))
-
-    print(text_inline)
 
     return text_nodes_final
 
