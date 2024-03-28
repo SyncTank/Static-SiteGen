@@ -115,17 +115,25 @@ def inline_markdown_capture(old_node) -> list:
 
 
 def markdown_block(markdown) -> list:
-    text_block = []
-    print(markdown)
-    print()
-    print(markdown.split('\n'))
+    text_nodes_final = []
+    mark_buffer = markdown.split('\n')
+    temp_buffer = []
+    text_blocks = []
+
+    for item in mark_buffer:
+        if item is not '':
+            temp_buffer.append(item.strip().rstrip())
+
+    print(temp_buffer)
+
+
 
     for i, v in enumerate(markdown.split('\n')):
         print(i, v, re.search(block_delimiter_dict_pattern['unordered'], v))
         if re.match(block_delimiter_dict_pattern['unordered'], v):
-            print("yes")
+            print("yes", 343242424)
 
-    return text_block
+    return text_nodes_final
 
 
 class TextNode:
