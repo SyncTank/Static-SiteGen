@@ -129,6 +129,19 @@ class TestTextNode(unittest.TestCase):
 
                 * This is a list
                 * with items
+                
+                - yes this is it
+                - you will know
+                
+                1. that I will win
+                2. in a battle of fonts
+                
+                > though 
+                
+                # we will 
+                ## prevail
+                ### against the evil of
+                #### man
                  """)
         read_block = markdown_block(block)
         self.assertIsNotNone(read_block, print(read_block))

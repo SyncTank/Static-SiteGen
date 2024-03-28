@@ -30,13 +30,16 @@ inline_delimiter_dict_pattern = {
     "image": r'!\[(.*?)\]\((.*?)\)',  # ![*](*)
 }
 
-block_delimiter_dict_pattern = {
+block_delimiter_simple_pattern = {
     "paragraph": r'^[A-Za-z\s]*$',  # Just text
-    "heading": r'^\s*[\#]\s*(.*)',  # (1-6 number of # words)
+    "blockquote": r'^\s*[\>]\s*(.*)',  # > words
     "code": r'```([\s\S]*?)```',  # ``` words ```
-    "quote": r'^\s*[\>]\s*(.*)',  # > words
-    "unordered": r'^\s*[\*-]\s*(.*)',  # * or - words
-    "ordered": r'^\s*[\d]\s*(.*)',  # 1. words
+}
+
+block_delimiter_dict_pattern = {
+    "h": r'^\s*[\#]\s*(.*)',  # (1-6 number of # words)
+    "ul": r'^\s*[\*-]\s*(.*)',  # * or - words unordered list
+    "ol": r'^\s*[\d]\s*(.*)',  # 1. words ordered list
 }
 
 
@@ -122,12 +125,14 @@ def markdown_block(markdown) -> list:
     mark_buffer = markdown.split('\n')
     temp_buffer = []
     text = []
-    text_inline = []
-    text_blocks = []
+    text_dump = []
 
     for item in mark_buffer:
         if not item.isspace() and item != '':
             temp_buffer.append(item.strip().rstrip())
+
+    print(temp_buffer)
+    print()
 
     string_builder = ""
     capturing = False
@@ -135,26 +140,41 @@ def markdown_block(markdown) -> list:
         if item == '```':
             capturing = not capturing
             if len(string_builder) > 0:
-                string_builder += '```'
-                text.append(string_builder)
-        if capturing:
+                text.append(TextNode(string_builder, "code", None))
+        if capturing and item != '```':
             string_builder += item + "\n"
         elif not capturing and item != '```':
             text.append(item)
 
     temp_buffer = []
     for i, v in enumerate(text):
-        text_match = re.search(block_delimiter_dict_pattern["paragraph"], v)
-        print(i, v, bool(text_match))
-        if bool(text_match):
-            temp_buffer.append(inline_markdown_capture(v, "text"))
-        else:
+        find_match = False
+        for limit in block_delimiter_simple_pattern:
+            if type(v) is TextNode:
+                break
+            find_match = re.search(block_delimiter_simple_pattern[limit], v)
+            if bool(find_match):
+                if limit == 'paragraph':
+                    temp_buffer.append(TextNode(v, "text", None))
+                    break
+                elif limit == 'blockquote':
+                    temp_buffer.append(TextNode(v[2:], "blockquote", None))
+                    break
+        if not find_match:
             temp_buffer.append(v)
+
+    text = []
+    capture_range = []
+    for i, v in enumerate(temp_buffer):
+        for limit in block_delimiter_dict_pattern:
+            pass
 
     print()
 
     for i, v in enumerate(temp_buffer):
         print(i, v)
+
+
 
     return text_nodes_final
 
