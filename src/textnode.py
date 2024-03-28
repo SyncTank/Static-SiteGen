@@ -35,7 +35,7 @@ block_delimiter_dict_pattern = {
     "heading": r'',  # (1-6 number of # words)
     "code": r'',  # ``` words ```
     "quote": r'',  # > words
-    "unordered": r'\n(\*\s\w+.*)',  # * or - words
+    "unordered": r'^\s*\*\s*(.*)',  # * or - words
     "ordered": r'',  # 1. words
 }
 
@@ -121,17 +121,29 @@ def markdown_block(markdown) -> list:
     text_blocks = []
 
     for item in mark_buffer:
-        if item is not '':
+        if not item.isspace() and item is not '':
             temp_buffer.append(item.strip().rstrip())
 
     print(temp_buffer)
 
-
-
-    for i, v in enumerate(markdown.split('\n')):
+    for i, v in enumerate(temp_buffer):
         print(i, v, re.search(block_delimiter_dict_pattern['unordered'], v))
-        if re.match(block_delimiter_dict_pattern['unordered'], v):
-            print("yes", 343242424)
+        text_blocks.append(i)
+
+    if len(temp_buffer) == 0:
+        for item in temp_buffer:
+            text_nodes_final.append(inline_markdown_capture(item))
+    else:
+        counter = 0
+        for i, v in enumerate(temp_buffer):
+            if i == temp_buffer[counter]:
+                counter += 1
+                for limiter in block_delimiter_dict_pattern:
+                    re.search(block_delimiter_dict_pattern[limiter], v)
+            else:
+                for item in temp_buffer:
+                    text_nodes_final.append(inline_markdown_capture(item))
+
 
     return text_nodes_final
 
