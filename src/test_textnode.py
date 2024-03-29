@@ -113,6 +113,27 @@ class TestTextNode(unittest.TestCase):
         read_block = markdown_block(block)
         self.assertIsNotNone(read_block, print(read_block))
 
+    def test_node_markdown_delimit_pattern_dict(self) -> None:
+        block = (""" 
+                * This is a list
+                * with items
+                1. This is a list item
+                - yes this is it
+                - you will know
+
+                1. that I will win
+                2. in a battle of fonts
+
+                > though 
+
+                # we will 
+                ## prevail
+                ### against the evil of
+                #### man
+                 """)
+        read_block = markdown_block(block)
+        self.assertIsNotNone(read_block, print(read_block))
+
     def test_node_markdown_delimit_pattern_two(self) -> None:
         block = ("""This is **bolded** paragraph
 

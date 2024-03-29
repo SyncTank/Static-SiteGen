@@ -1,4 +1,4 @@
-from htmlnode import LeafNode
+from htmlnode import LeafNode, ParentNode
 import re
 
 text_type_dict = {
@@ -123,14 +123,18 @@ def inline_markdown_capture(old_node, old_node_type=None) -> list:
 def markdown_block(markdown) -> list:
     text_nodes_final = []
     mark_buffer = markdown.split('\n')
+    second_buffer = []
     temp_buffer = []
     text = []
-    text_dump = []
 
     for item in mark_buffer:
         if not item.isspace() and item != '':
             temp_buffer.append(item.strip().rstrip())
 
+        second_buffer.append(item.strip().rstrip())
+
+    print(second_buffer)
+    print()
     print(temp_buffer)
     print()
 
@@ -163,18 +167,54 @@ def markdown_block(markdown) -> list:
         if not find_match:
             temp_buffer.append(v)
 
-    text = []
-    capture_range = []
-    for i, v in enumerate(temp_buffer):
-        for limit in block_delimiter_dict_pattern:
-            pass
+    block_items = []
+    temp_block = []
+    limit_type = None
+    for i, v in enumerate(second_buffer):
+        if v == '' or v.isspace():
+            if len(temp_block) > 0:
+                if limit_type == 'ul' or limit_type == 'ol':
+                    leaf_childerns = []
+                    for item in temp_block:
+                        leaf_childerns.append(LeafNode("li", item[2:]))
+                    block_items.append(ParentNode(limit_type, leaf_childerns.copy(), None))
+                elif limit_type == 'h':
+                    pass
+                else:
+                    block_items.append(temp_block.copy())
+                temp_block = []
+                limit_type = None
+        else:
+            if limit_type is not None and not limit_type.isspace() and limit_type != '':
+                old_match = re.search(block_delimiter_dict_pattern[limit_type], v)
+                if bool(old_match):
+                    temp_block.append(v)
+                else:
+                    if limit_type == 'ul' or limit_type == 'ol':
+                        leaf_childerns = []
+                        for item in temp_block:
+                            leaf_childerns.append(LeafNode("li", item[2:]))
+                        block_items.append(ParentNode(limit_type, leaf_childerns.copy(), None))
+                    elif limit_type == 'h':
+                        pass
+                    else:
+                        block_items.append(temp_block.copy())
+                    temp_block = []
+                    limit_type = None
+            if limit_type is None:
+                for limit in block_delimiter_dict_pattern:
+                    matching = re.search(block_delimiter_dict_pattern[limit], v)
+                    if bool(matching):
+                        limit_type = limit
+                        temp_block.append(v)
+                        break
 
-    print()
 
-    for i, v in enumerate(temp_buffer):
+
+    for i, v in enumerate(block_items):
         print(i, v)
 
-
+    print()
 
     return text_nodes_final
 
