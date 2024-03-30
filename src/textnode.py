@@ -181,7 +181,7 @@ def markdown_block(markdown) -> list:
                 elif limit_type == 'h':
                     leaf_childerns = []
                     for j in range(0, len(temp_block)):
-                       pass  # loop over temp_block and do a count to concate into h for header type.
+                        block_items.append(LeafNode("h" + str(temp_block[j].count("#")), temp_block[j], None))
                 else:
                     block_items.append(temp_block.copy())
                 temp_block = []
@@ -198,7 +198,9 @@ def markdown_block(markdown) -> list:
                             leaf_childerns.append(LeafNode("li", item[2:]))
                         block_items.append(ParentNode(limit_type, leaf_childerns.copy(), None))
                     elif limit_type == 'h':
-                        pass  # loop over temp_block and do a count to concate into h for header type.
+                        leaf_childerns = []
+                        for j in range(0, len(temp_block)):
+                            block_items.append(LeafNode("h" + str(temp_block[j].count("#")), temp_block[j], None))
                     else:
                         block_items.append(temp_block.copy())
                     temp_block = []
