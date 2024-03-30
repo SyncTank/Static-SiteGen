@@ -66,3 +66,6 @@ class ParentNode(HtmlNode):
             base_body += "</" + self.tag + ">"
 
             return base_body
+
+    def __repr__(self):
+        return f"ParentNode({self.tag}, {self.value}, children: {self.children}, {self.props})"

@@ -133,11 +133,6 @@ def markdown_block(markdown) -> list:
 
         second_buffer.append(item.strip().rstrip())
 
-    print(second_buffer)
-    print()
-    print(temp_buffer)
-    print()
-
     string_builder = ""
     capturing = False
     for item in temp_buffer:
@@ -166,6 +161,9 @@ def markdown_block(markdown) -> list:
                     break
         if not find_match:
             temp_buffer.append(v)
+
+    for i, v in enumerate(temp_buffer):
+        print(i, v)
 
     block_items = []
     temp_block = []
@@ -213,10 +211,8 @@ def markdown_block(markdown) -> list:
                         temp_block.append(v)
                         break
 
-    for i, v in enumerate(block_items):
-        print(i, v)
-
-    print()
+    for i, v in enumerate(block_items): # need to merge the lists of temp_buffer with block_items
+        print(i, v) # do temp to block priotarty
 
     return text_nodes_final
 
