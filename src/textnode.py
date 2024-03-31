@@ -171,14 +171,13 @@ def markdown_block(markdown) -> list:
     for i, v in enumerate(second_buffer):
         if v == '' or v.isspace():
             if len(temp_block) > 0:
+                leaf_childerns = []
                 if limit_type == 'ul' or limit_type == 'ol':
-                    leaf_childerns = []
                     for item in temp_block:
                         leaf_childerns.append(LeafNode("li", item[2:]))
                     block_items.append(ParentNode(limit_type, leaf_childerns.copy(), None))
                 elif limit_type == 'h':
-                    leaf_childerns = []
-                    for j in range(0, len(temp_block)):
+                     for j in range(0, len(temp_block)):
                         block_items.append(LeafNode("h" + str(temp_block[j].count("#")), temp_block[j], None))
                 else:
                     block_items.append(temp_block.copy())
@@ -190,13 +189,12 @@ def markdown_block(markdown) -> list:
                 if bool(old_match):
                     temp_block.append(v)
                 else:
+                    leaf_childerns = []
                     if limit_type == 'ul' or limit_type == 'ol':
-                        leaf_childerns = []
                         for item in temp_block:
                             leaf_childerns.append(LeafNode("li", item[2:]))
                         block_items.append(ParentNode(limit_type, leaf_childerns.copy(), None))
                     elif limit_type == 'h':
-                        leaf_childerns = []
                         for j in range(0, len(temp_block)):
                             block_items.append(LeafNode("h" + str(temp_block[j].count("#")), temp_block[j], None))
                     else:
