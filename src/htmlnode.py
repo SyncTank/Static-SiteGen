@@ -37,6 +37,8 @@ class LeafNode(HtmlNode):
                 return f'<{self.tag} href=:"">{self.value}</{self.tag}>'
             elif self.tag == "img":
                 return f'<{self.tag}{self.props_to_html()}>'
+            elif self.tag == "br":
+                return f'<{self.tag}>'
             else:
                 return f"<{self.tag}>{self.value}</{self.tag}>"
 

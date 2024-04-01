@@ -3,6 +3,7 @@ import re
 
 text_type_dict = {
     "text": None,
+    "br": "br",
     "bold": "b",
     "italic": "i",
     "code": "code",
@@ -160,11 +161,6 @@ def markdown_block(markdown) -> list:
         if not find_match:
             temp_buffer.append(v)
 
-    for i, v in enumerate(temp_buffer):
-        print(i, v, 1)
-
-    print()
-
     block_items = []
     temp_block = []
     limit_type = None
@@ -219,8 +215,14 @@ def markdown_block(markdown) -> list:
                 if not temp_block:
                     block_items.append(v)
 
-    for i, v in enumerate(block_items):  # need to merge the lists of temp_buffer with block_items
-        print(i, v)  # do temp to block priority
+    for i, v in enumerate(block_items):
+        if type(v) is not str:
+            text_nodes_final.append(v)
+        else:
+            if v.isspace() or v == "":
+                text_nodes_final.append(TextNode("", "br"))
+            else:
+                text_nodes_final.append(inline_markdown_capture(v))
 
     return text_nodes_final
 
