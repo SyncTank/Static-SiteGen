@@ -167,7 +167,7 @@ class TestTextNode(unittest.TestCase):
         read_block = markdown_block(block)
         self.assertIsNotNone(read_block, print(read_block))
 
-    def test_html_builder_node_blocks(self) -> None:
+    def test_html_builder_node_block(self) -> None:
         block = [("""# This is a heading
 
                 This is a paragraph of text. It has some **bold** and *italic* words inside of it.
@@ -175,6 +175,47 @@ class TestTextNode(unittest.TestCase):
                 * This is a list item
                 * This is another list item
                  """)]
+        read_block = html_builder(block)
+        self.assertIsNotNone(read_block, print(read_block))
+
+    def test_html_builder_node_blocks(self) -> None:
+        block = [("""# This is a heading
+
+                This is a paragraph of text. It has some **bold** and *italic* words inside of it.
+
+                * This is a list item
+                * This is another list item
+                 """),
+                 ("""This is **bolded** paragraph
+
+                        This is another paragraph with *italic* text and `code` here
+                        This is the same paragraph on a new line
+
+                        ```
+                        print("heel")
+                        console.log("hello");
+                        std::cout << "hello" << std::endl;
+                        system.println("hello");
+                        ```
+
+
+                        * This is a list
+                        * with items
+
+                        - yes this is it
+                        - you will know
+
+                        1. that I will win
+                        2. in a battle of fonts
+
+                        > though 
+
+                        # we will 
+                        ## prevail
+                        ### against the evil of
+                        #### man
+                         """)
+                 ]
         read_block = html_builder(block)
         self.assertIsNotNone(read_block, print(read_block))
 

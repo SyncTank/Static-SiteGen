@@ -3,6 +3,7 @@ import re
 
 text_type_dict = {
     "text": None,
+    "blockquote": "blockquote",
     "br": "br",
     "bold": "b",
     "italic": "i",
@@ -229,6 +230,7 @@ def markdown_block(markdown) -> list:
 
 def html_builder(blocks) -> list:
     html_elements = []
+    html_buffer = []
 
     if len(blocks) == 0:
         raise Exception("No blocks found")
@@ -245,6 +247,23 @@ def html_builder(blocks) -> list:
                 for block_node in block:
                     string_builder += block_node.text_node_to_html_node()
                 html_elements.append(string_builder)
+    elif len(blocks) > 1:
+        for block in blocks:
+            temp_buffer = markdown_block(block)
+            for block_node in temp_buffer:
+                block_relation = type(block_node)
+                if block_relation is LeafNode or block_relation is ParentNode:
+                    html_buffer.append(block_node.to_html())
+                elif block_relation is TextNode:
+                    html_buffer.append(block_node.text_node_to_html_node())
+                elif block_relation is list:
+                    string_builder = ""
+                    for node in block_node:
+                        string_builder += node.text_node_to_html_node()
+                    html_buffer.append(string_builder)
+            html_elements.append(html_buffer)
+    else:
+        raise Exception("Not a expected block")
 
     return html_elements
 
