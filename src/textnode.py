@@ -227,6 +227,27 @@ def markdown_block(markdown) -> list:
     return text_nodes_final
 
 
+def html_builder(blocks) -> list:
+    html_elements = []
+
+    if len(blocks) == 0:
+        raise Exception("No blocks found")
+    elif len(blocks) == 1:
+        temp_buffer = markdown_block(blocks[0])
+        for block in temp_buffer:
+            block_relation = type(block)
+            if block_relation is LeafNode or block_relation is ParentNode:
+                html_elements.append(block.to_html())
+            elif block_relation is TextNode:
+                html_elements.append(block.text_node_to_html_node())
+            elif block_relation is list:
+                string_builder = ""
+                for block_node in block:
+                    string_builder += block_node.text_node_to_html_node()
+                html_elements.append(string_builder)
+
+    return html_elements
+
 
 class TextNode:
     def __init__(self, text, text_Type, url=None) -> None:

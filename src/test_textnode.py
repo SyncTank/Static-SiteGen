@@ -1,6 +1,6 @@
 import unittest
 
-from textnode import TextNode, inline_markdown_capture, markdown_block
+from textnode import TextNode, inline_markdown_capture, markdown_block, html_builder
 
 
 class TestTextNode(unittest.TestCase):
@@ -167,6 +167,16 @@ class TestTextNode(unittest.TestCase):
         read_block = markdown_block(block)
         self.assertIsNotNone(read_block, print(read_block))
 
+    def test_html_builder_node_blocks(self) -> None:
+        block = [("""# This is a heading
+
+                This is a paragraph of text. It has some **bold** and *italic* words inside of it.
+
+                * This is a list item
+                * This is another list item
+                 """)]
+        read_block = html_builder(block)
+        self.assertIsNotNone(read_block, print(read_block))
 
 if __name__ == "__main__":
     unittest.main()
