@@ -39,6 +39,8 @@ class LeafNode(HtmlNode):
                 return f'<{self.tag}{self.props_to_html()}>'
             elif self.tag == "br":
                 return f'<{self.tag}>'
+            elif self.tag == "codeblock":
+                return f'<pre><code>{self.value}</code></pre>'
             else:
                 return f"<{self.tag}>{self.value}</{self.tag}>"
 

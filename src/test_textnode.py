@@ -171,6 +171,12 @@ class TestTextNode(unittest.TestCase):
         block = [("""# This is a heading
 
                 This is a paragraph of text. It has some **bold** and *italic* words inside of it.
+                
+                ```
+                code block here
+                test me please
+                IEEE
+                ```
 
                 * This is a list item
                 * This is another list item

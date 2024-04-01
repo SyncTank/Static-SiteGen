@@ -8,8 +8,10 @@ text_type_dict = {
     "bold": "b",
     "italic": "i",
     "code": "code",
+    "codeblock": "codeblock",
     "link": "a",
-    "image": "img"
+    "image": "img",
+    "para": "p"
 }
 
 delimiter_dict = {
@@ -137,7 +139,7 @@ def markdown_block(markdown) -> list:
         if item == '```':
             capturing = not capturing
             if len(string_builder) > 0:
-                text.append(TextNode(string_builder, "code", None))
+                text.append(TextNode(string_builder, "codeblock", None))
         if capturing and item != '```':
             string_builder += item + "\n"
         elif not capturing and item != '```':
@@ -154,7 +156,7 @@ def markdown_block(markdown) -> list:
             find_match = re.search(block_delimiter_simple_pattern[limit], v)
             if bool(find_match):
                 if limit == 'paragraph':
-                    temp_buffer.append(TextNode(v, "text", None))
+                    temp_buffer.append(TextNode(v, "para", None))
                     break
                 elif limit == 'blockquote':
                     temp_buffer.append(TextNode(v[2:], "blockquote", None))
