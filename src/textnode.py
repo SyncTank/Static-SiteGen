@@ -227,6 +227,7 @@ def markdown_block(markdown) -> list:
     return text_nodes_final
 
 
+
 class TextNode:
     def __init__(self, text, text_Type, url=None) -> None:
         self.text = text
