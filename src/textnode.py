@@ -145,9 +145,9 @@ def markdown_block(markdown) -> list:
     for i, v in enumerate(text):
         find_match = False
         for limit in block_delimiter_simple_pattern:
-            if v.isspace() or v == "":
-                break
             if type(v) is TextNode:
+                break
+            if v == '' or v.isspace():
                 break
             find_match = re.search(block_delimiter_simple_pattern[limit], v)
             if bool(find_match):
@@ -168,7 +168,10 @@ def markdown_block(markdown) -> list:
     block_items = []
     temp_block = []
     limit_type = None
-    for i, v in enumerate(second_buffer):
+    for i, v in enumerate(temp_buffer):
+        if type(v) is TextNode:
+            block_items.append(v)
+            continue
         if v == '' or v.isspace():
             if len(temp_block) > 0:
                 leaf_childerns = []
@@ -178,11 +181,15 @@ def markdown_block(markdown) -> list:
                     block_items.append(ParentNode(limit_type, leaf_childerns.copy(), None))
                 elif limit_type == 'h':
                     for j in range(0, len(temp_block)):
-                        block_items.append(LeafNode("h" + str(temp_block[j].count("#")), temp_block[j], None))
+                        temp_value = temp_block[j].strip("#").lstrip(" ")
+                        block_items.append(LeafNode("h" + str(temp_block[j].count("#")), temp_value, None))
                 else:
                     block_items.append(temp_block.copy())
                 temp_block = []
                 limit_type = None
+                block_items.append(v)
+            else:
+                block_items.append(v)
         else:
             if limit_type is not None and not limit_type.isspace() and limit_type != '':
                 old_match = re.search(block_delimiter_dict_pattern[limit_type], v)
@@ -196,7 +203,8 @@ def markdown_block(markdown) -> list:
                         block_items.append(ParentNode(limit_type, leaf_childerns.copy(), None))
                     elif limit_type == 'h':
                         for j in range(0, len(temp_block)):
-                            block_items.append(LeafNode("h" + str(temp_block[j].count("#")), temp_block[j], None))
+                            temp_value = temp_block[j].strip("#").lstrip(" ")
+                            block_items.append(LeafNode("h" + str(temp_block[j].count("#")), temp_value, None))
                     else:
                         block_items.append(temp_block.copy())
                     temp_block = []
@@ -208,6 +216,8 @@ def markdown_block(markdown) -> list:
                         limit_type = limit
                         temp_block.append(v)
                         break
+                if not temp_block:
+                    block_items.append(v)
 
     for i, v in enumerate(block_items):  # need to merge the lists of temp_buffer with block_items
         print(i, v)  # do temp to block priority
