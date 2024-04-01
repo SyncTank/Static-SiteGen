@@ -124,18 +124,14 @@ def markdown_block(markdown) -> list:
     text_nodes_final = []
     mark_buffer = markdown.split('\n')
     second_buffer = []
-    temp_buffer = []
     text = []
 
     for item in mark_buffer:
-        if not item.isspace() and item != '':
-            temp_buffer.append(item.strip().rstrip())
-
         second_buffer.append(item.strip().rstrip())
 
     string_builder = ""
     capturing = False
-    for item in temp_buffer:
+    for item in second_buffer:
         if item == '```':
             capturing = not capturing
             if len(string_builder) > 0:
@@ -149,6 +145,8 @@ def markdown_block(markdown) -> list:
     for i, v in enumerate(text):
         find_match = False
         for limit in block_delimiter_simple_pattern:
+            if v.isspace() or v == "":
+                break
             if type(v) is TextNode:
                 break
             find_match = re.search(block_delimiter_simple_pattern[limit], v)
@@ -163,7 +161,9 @@ def markdown_block(markdown) -> list:
             temp_buffer.append(v)
 
     for i, v in enumerate(temp_buffer):
-        print(i, v)
+        print(i, v, 1)
+
+    print()
 
     block_items = []
     temp_block = []
@@ -177,7 +177,7 @@ def markdown_block(markdown) -> list:
                         leaf_childerns.append(LeafNode("li", item[2:]))
                     block_items.append(ParentNode(limit_type, leaf_childerns.copy(), None))
                 elif limit_type == 'h':
-                     for j in range(0, len(temp_block)):
+                    for j in range(0, len(temp_block)):
                         block_items.append(LeafNode("h" + str(temp_block[j].count("#")), temp_block[j], None))
                 else:
                     block_items.append(temp_block.copy())
@@ -209,8 +209,8 @@ def markdown_block(markdown) -> list:
                         temp_block.append(v)
                         break
 
-    for i, v in enumerate(block_items): # need to merge the lists of temp_buffer with block_items
-        print(i, v) # do temp to block priotarty
+    for i, v in enumerate(block_items):  # need to merge the lists of temp_buffer with block_items
+        print(i, v)  # do temp to block priority
 
     return text_nodes_final
 
