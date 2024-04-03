@@ -20,21 +20,23 @@ def delete_files(path_delete: str) -> None:
                 os.rmdir(file_path)
 
 
-def load_dir(dir_copy: str, dir_path: str) -> NotImplemented:
+def load_dir(dir_copy: str, dir_path: str) -> None:
     if not os.path.exists(dir_copy):
         raise FileNotFoundError(dir_copy)
+    if dir_path == "../public":
+        load_dir(dir_path, "../backup")
+    if not os.path.exists(dir_path):
+        print(dir_copy, dir_path, "New folder created")
+        os.mkdir(dir_path)
+        dir_copy_files(dir_copy, dir_path)
     else:
-        if not os.path.exists(dir_path):
-            print("making")
-            #os.mkdir(dir_path)
-            #dir_copy_files(dir_copy, dir_path)
+        if not os.listdir(dir_path):
+            print(dir_copy, dir_path, "Empty directory")
+            dir_copy_files(dir_copy, dir_path)
         else:
-            if not os.listdir(dir_path):
-                print(dir_copy, dir_path)
-                dir_copy_files(dir_copy, dir_path)
-            else:
-                delete_files(dir_path)
-                #dir_copy_files(dir_copy, dir_path)
+            print(dir_copy, dir_path, "already exists")
+            delete_files(dir_path)
+            dir_copy_files(dir_copy, dir_path)
 
 
 def dir_copy_files(dir_copy_path: str, dir_moveto: str) -> None:
@@ -51,7 +53,7 @@ def dir_copy_files(dir_copy_path: str, dir_moveto: str) -> None:
 
 
 def main() -> None:
-    load_dir("../static", "../backup")
+    load_dir("../static", "../public")
 
 
 main()
