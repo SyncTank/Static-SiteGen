@@ -7,38 +7,51 @@ from os import path, mkdir, listdir
 
 
 def delete_files(path_delete: str) -> None:
-    pass
-
-
-def check_dir(dir_path: str) -> bool:
-    dir_state = False
-    if not os.path.exists(dir_path):
-        os.mkdir(dir_path)
+    list_objs = os.listdir(path_delete)
+    if len(list_objs) == 0:
+        return
     else:
-        dir_state = True
-        if dir_path == "../static":
-            if os.path.exists(f'../backup'):
-                shutil.rmtree(f'../backup')
+        for item in list_objs:
+            file_path = f'{path_delete}/{item}'
+            if os.path.isfile(file_path):
+                os.remove(file_path)
             else:
-                os.mkdir(f'../backup')
-
-            dir_copy(dir_path, f"../backup")
-
-    return dir_state
+                delete_files(file_path)
+                os.rmdir(file_path)
 
 
-def dir_copy(dir_copy_path: str, dir_moveto: str) -> None:
-    items = os.listdir(dir_copy_path)
-    for item in items:
-        print(item)
-        if os.path.isdir(f"{dir_copy_path}/{item}"):
-            os.mkdir(f"{dir_moveto}/{item}")
-            dir_copy(f"{dir_copy_path}/{item}", f"{dir_moveto}/{item}")
+def load_dir(dir_copy: str, dir_path: str) -> NotImplemented:
+    if not os.path.exists(dir_copy):
+        raise FileNotFoundError(dir_copy)
+    else:
+        if not os.path.exists(dir_path):
+            print("making")
+            #os.mkdir(dir_path)
+            #dir_copy_files(dir_copy, dir_path)
         else:
-            shutil.copy(item, f"{dir_moveto}")
+            if not os.listdir(dir_path):
+                print(dir_copy, dir_path)
+                dir_copy_files(dir_copy, dir_path)
+            else:
+                delete_files(dir_path)
+                #dir_copy_files(dir_copy, dir_path)
+
+
+def dir_copy_files(dir_copy_path: str, dir_moveto: str) -> None:
+    list_objs = os.listdir(dir_copy_path)
+    if len(list_objs) == 0:
+        return
+    for item in list_objs:
+        file_path = f'{dir_copy_path}/{item}'
+        if os.path.isfile(file_path):
+            shutil.copy(file_path, dir_moveto)
+        else:
+            os.mkdir(dir_moveto+"/"+item)
+            dir_copy_files(file_path, dir_moveto+"/"+item)
 
 
 def main() -> None:
-    check_dir("../static")
+    load_dir("../static", "../backup")
+
 
 main()
