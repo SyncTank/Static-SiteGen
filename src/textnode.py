@@ -73,7 +73,7 @@ def inline_markdown_capture(old_node, old_node_type=None) -> list:
         raise Exception("Invalid Markdown syntax")
 
     if old_node_type == "text":
-        return [TextNode(old_node, 'text', None)]  # Careful for TextNode Tag on Text
+        return [TextNode(old_node, 'text', None)] #  special tags refer HTML Node 
 
     if old_node is TextNode:
         return old_node
