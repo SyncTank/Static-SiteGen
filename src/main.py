@@ -1,7 +1,6 @@
 import os.path
 import shutil
 
-from src.htmlnode import LeafNode
 from textnode import TextNode
 from os import path, mkdir, listdir
 
