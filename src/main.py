@@ -1,5 +1,6 @@
 import os.path
 import shutil
+import datetime
 
 from textnode import TextNode
 from os import path, mkdir, listdir
@@ -23,7 +24,20 @@ def load_dir(dir_copy: str, dir_path: str) -> None:
     if not os.path.exists(dir_copy):
         raise FileNotFoundError(dir_copy)
     if dir_path == "../public":
-        load_dir(dir_path, "../backup")
+        versions = os.listdir("../backup")
+        verison_backup = len(versions)
+        date_backup = datetime.date.today()
+        time_backup = datetime.datetime.today()
+        if verison_backup > 4:
+            to_del = ""
+            for folder in versions:
+                if len(to_del) == 0:
+                    to_del = folder
+                if os.path.getmtime(f"../backup/{folder}") < os.path.getmtime(f"../backup/{to_del}"):
+                    to_del = folder
+            delete_files(f"../backup/{to_del}")
+            os.rmdir(f"../backup/{to_del}")
+        load_dir(dir_path, f"../backup/backup_{verison_backup}_{date_backup}_{time_backup}")
     if not os.path.exists(dir_path):
         print(dir_copy, dir_path, "New folder created")
         os.mkdir(dir_path)
