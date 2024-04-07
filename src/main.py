@@ -1,10 +1,16 @@
 import os.path
 import shutil
 import datetime
+from types import NotImplementedType
 
 from textnode import TextNode
 from os import path, mkdir, listdir
 
+def extract_title(markdown: str) -> None
+    return NotImplementedType
+
+def generate_page(from_page: str, template_page: str, dest_path: str) -> None
+    return NotImplementedType
 
 def delete_files(path_delete: str) -> None:
     list_objs = os.listdir(path_delete)
