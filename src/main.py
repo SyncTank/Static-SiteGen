@@ -6,13 +6,19 @@ from types import NotImplementedType
 from textnode import TextNode
 from os import path, mkdir, listdir
 
-def extract_title(markdown: str) -> None
-    return NotImplementedType
+def extract_title(markdown_file: str) -> None:
+    try:
+        with open(markdown_file) as file:
+            first_line_check = file.readline()
+
+        print(first_line_check, '#' in first_line_check)
+    except:
+       raise Exception("File either does not exist or does not have header 1")
 
 # Grab the text of the h1 header from the markdown file (The line that starts with a single #) and return it. 
 # If there is no h1 header, raise an exception. All pages need a single h1 header.
 
-def generate_page(from_page: str, template_page: str, dest_path: str) -> None
+def generate_page(from_page: str, template_page: str, dest_path: str) -> None:
     return NotImplementedType
 
 # Print a message to the console that says something like "Generating page from from_path to dest_path using template_path".
@@ -84,6 +90,6 @@ def dir_copy_files(dir_copy_path: str, dir_moveto: str) -> None:
 
 def main() -> None:
     load_dir("../static", "../public")
-
+    print(extract_title("../content/index.md")) 
 
 main()
