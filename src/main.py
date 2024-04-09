@@ -6,17 +6,19 @@ from types import NotImplementedType
 from textnode import TextNode
 from os import path, mkdir, listdir
 
-def extract_title(markdown_file: str) -> None:
+def extract_title(markdown_file: str) -> bool:
+    if len(markdown_file) < 0:
+        return False
     try:
         with open(markdown_file) as file:
             first_line_check = file.readline()
-
-        print(first_line_check, '#' in first_line_check)
-    except:
-       raise Exception("File either does not exist or does not have header 1")
-
-# Grab the text of the h1 header from the markdown file (The line that starts with a single #) and return it. 
-# If there is no h1 header, raise an exception. All pages need a single h1 header.
+    except Exception as e:
+        print(e)
+        return False
+    if '#' in first_line_check:
+        return True
+    else:
+        return False
 
 def generate_page(from_page: str, template_page: str, dest_path: str) -> None:
     return NotImplementedType
@@ -24,6 +26,7 @@ def generate_page(from_page: str, template_page: str, dest_path: str) -> None:
 # Print a message to the console that says something like "Generating page from from_path to dest_path using template_path".
 # Read the markdown file at from_path and store the contents in a variable.
 # Read the template file at template_path and store the contents in a variable.
+
 # Use your markdown_to_html_node function and .to_html() method to convert the markdown file to HTML.
 # Use the extract_title function to grab the title of the page.
 # Replace the {{ Title }} and {{ Content }} placeholders in the template with the HTML and title you generated.
@@ -91,5 +94,10 @@ def dir_copy_files(dir_copy_path: str, dir_moveto: str) -> None:
 def main() -> None:
     load_dir("../static", "../public")
     print(extract_title("../content/index.md")) 
+    start_gen = extract_title("../content/index.md") 
+
+    if start_gen:
+        delete_files("../public")
+        generate_page("../content/index.md", "../template.html", "../public/index.html")
 
 main()
