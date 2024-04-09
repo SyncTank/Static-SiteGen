@@ -21,9 +21,9 @@ def extract_title(markdown_file: str) -> bool:
         return False
 
 def generate_page(from_page: str, template_page: str, dest_path: str) -> None:
+    print(f"Generating Page from {from_page} to {dest_path} using {template_page}")
     return NotImplementedType
 
-# Print a message to the console that says something like "Generating page from from_path to dest_path using template_path".
 # Read the markdown file at from_path and store the contents in a variable.
 # Read the template file at template_path and store the contents in a variable.
 
