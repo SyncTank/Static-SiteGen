@@ -3,7 +3,7 @@ import shutil
 import datetime
 from types import NotImplementedType
 
-from textnode import TextNode
+from textnode import TextNode, html_builder
 from os import path, mkdir, listdir, read
 
 def extract_title(markdown_file: str) -> bool:
@@ -25,7 +25,7 @@ def read_file_with_check(file_to_check: str):
         raise Exception("No file is called")
     try:
         with open(file_to_check) as file:
-            read_lines = file.readlines()
+            read_lines = file.read()
     except Exception as e:
         print(e)
         return
@@ -38,9 +38,9 @@ def read_file_with_check(file_to_check: str):
 
 def generate_page(from_page: str, template_page: str, dest_path: str) -> None:
     print(f"Generating Page from {from_page} to {dest_path} using {template_page}")
-    markdown = read_file_with_check(from_page)
+    markdown_file = read_file_with_check(from_page)
     template = read_file_with_check(template_page)
-
+    print(html_builder([markdown_file] )) 
 
 # Use your markdown_to_html_node function and .to_html() method to convert the markdown file to HTML.
 # Use the extract_title function to grab the title of the page.

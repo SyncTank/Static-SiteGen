@@ -133,6 +133,7 @@ def markdown_block(markdown) -> list:
     for item in mark_buffer:
         second_buffer.append(item.strip().rstrip())
 
+    print(markdown, 1)
     string_builder = ""
     capturing = False
     for item in second_buffer:
