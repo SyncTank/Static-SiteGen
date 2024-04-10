@@ -40,7 +40,7 @@ def generate_page(from_page: str, template_page: str, dest_path: str) -> None:
     print(f"Generating Page from {from_page} to {dest_path} using {template_page}")
     markdown_file = read_file_with_check(from_page)
     template = read_file_with_check(template_page)
-    print(html_builder([markdown_file] )) 
+    html_builder([markdown_file]) 
 
 # Use your markdown_to_html_node function and .to_html() method to convert the markdown file to HTML.
 # Use the extract_title function to grab the title of the page.

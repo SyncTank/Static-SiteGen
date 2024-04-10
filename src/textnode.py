@@ -91,6 +91,11 @@ def inline_markdown_capture(old_node, old_node_type=None) -> list:
         for item in items:
             long_buffer.append(item)
 
+    print(2)
+    for item in long_buffer:
+        print(item)
+    return
+
     counter_buffer = 0
     for i, v in enumerate(string_copy):
         if i == long_buffer[counter_buffer][0]:
@@ -133,7 +138,6 @@ def markdown_block(markdown) -> list:
     for item in mark_buffer:
         second_buffer.append(item.strip().rstrip())
 
-    print(markdown, 1)
     string_builder = ""
     capturing = False
     for item in second_buffer:
@@ -145,6 +149,8 @@ def markdown_block(markdown) -> list:
             string_builder += item + "\n"
         elif not capturing and item != '```':
             text.append(item)
+
+    
 
     temp_buffer = []
     for i, v in enumerate(text):
@@ -164,6 +170,10 @@ def markdown_block(markdown) -> list:
                     break
         if not find_match:
             temp_buffer.append(v)
+
+    print(1)
+    for i in temp_buffer:
+        print(i)
 
     block_items = []
     temp_block = []
