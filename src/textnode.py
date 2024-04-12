@@ -94,7 +94,6 @@ def inline_markdown_capture(old_node, old_node_type=None) -> list:
     print(2)
     for item in long_buffer:
         print(item)
-    return
 
     counter_buffer = 0
     for i, v in enumerate(string_copy):
