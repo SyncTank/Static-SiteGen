@@ -6,6 +6,7 @@ from types import NotImplementedType
 from textnode import TextNode, html_builder
 from os import path, mkdir, listdir, read
 
+
 def extract_title(markdown_file: str) -> bool:
     if len(markdown_file) < 0:
         return False
@@ -20,6 +21,7 @@ def extract_title(markdown_file: str) -> bool:
     else:
         return False
 
+
 def read_file_with_check(file_to_check: str):
     if len(file_to_check) < 0:
         raise Exception("No file is called")
@@ -31,16 +33,18 @@ def read_file_with_check(file_to_check: str):
         return
 
     markdown = ""
-    if  read_lines is not None:
+    if read_lines is not None:
         for item in read_lines:
             markdown += item
         return markdown
+
 
 def generate_page(from_page: str, template_page: str, dest_path: str) -> None:
     print(f"Generating Page from {from_page} to {dest_path} using {template_page}")
     markdown_file = read_file_with_check(from_page)
     template = read_file_with_check(template_page)
-    html_builder([markdown_file]) 
+    html_builder([markdown_file])
+
 
 # Use your markdown_to_html_node function and .to_html() method to convert the markdown file to HTML.
 # Use the extract_title function to grab the title of the page.
@@ -102,17 +106,18 @@ def dir_copy_files(dir_copy_path: str, dir_moveto: str) -> None:
         if os.path.isfile(file_path):
             shutil.copy(file_path, dir_moveto)
         else:
-            os.mkdir(dir_moveto+"/"+item)
-            dir_copy_files(file_path, dir_moveto+"/"+item)
+            os.mkdir(dir_moveto + "/" + item)
+            dir_copy_files(file_path, dir_moveto + "/" + item)
 
 
 def main() -> None:
     load_dir("../static", "../public")
-    print(extract_title("../content/index.md")) 
-    start_gen = extract_title("../content/index.md") 
+    print(extract_title("../content/index.md"))
+    start_gen = extract_title("../content/index.md")
 
     if start_gen:
         delete_files("../public")
         generate_page("../content/index.md", "../template.html", "../public/index.html")
+
 
 main()
