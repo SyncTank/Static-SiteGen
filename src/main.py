@@ -169,7 +169,6 @@ def main() -> None:
     print(extract_title(f"{abso_path}\\content\\index.md"))
 
     if bool(extract_title(f"{abso_path}\\content\\index.md")):
-        # delete_files("../public")
         generate_page(f"{abso_path}\\content\\index.md",
                       f"{abso_path}\\template.html",
                       f"{abso_path}\\public\\index.html")
