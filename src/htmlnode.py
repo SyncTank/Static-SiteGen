@@ -32,11 +32,11 @@ class LeafNode(HtmlNode):
             return f"{self.value}"
         else:
             if self.tag == "a" and self.props is not None:
-                return f"<{self.tag}{self.props_to_html()}>{self.value}</{self.tag}>"
+                return f"<{self.tag}{self.props_to_html()}> {self.value}</{self.tag}>"
             elif self.tag == "a":
-                return f'<{self.tag} href=:"">{self.value}</{self.tag}>'
+                return f'<{self.tag} href=:""> {self.value}</{self.tag}>'
             elif self.tag == "img":
-                return f'<{self.tag}{self.props_to_html()}>'
+                return f'<{self.tag}{self.props_to_html()}/>'
             elif self.tag == "br":
                 return f'<{self.tag}>'
             elif self.tag == "codeblock":

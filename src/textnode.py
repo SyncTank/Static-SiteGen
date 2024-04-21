@@ -30,7 +30,8 @@ inline_delimiter_dict_pattern = {
     "bold": r'(?<!\*)\*\*([^\*]+)\*\*',  # **
     "italic": r'(?<!\*)\*([^\*]+)\*(?!\*)',  # *
     "code": r'`(.*?)`',  # `
-    "link": r'\s\[(.*?)\]\((.*?)\)',  # [*](*)
+    #"link": r'\s\[(.*?)\]\((.*?)\)',  # [*](*)
+    "link": r'\[(.*?)\]\((.*?)\)',  # [*](*)
     "image": r'!\[(.*?)\]\((.*?)\)',  # ![*](*)
 }
 
@@ -90,14 +91,6 @@ def inline_markdown_capture(old_node, old_node_type=None) -> list:
     for items in sort_buffer:
         for item in items:
             long_buffer.append(item)
-
-    print(2)
-    for item in long_buffer:
-        print(item)
-
-    if len(long_buffer) == 0:
-        print(string_copy)
-        return [TextNode(string_copy, 'text', None)]
 
     counter_buffer = 0
     for i, v in enumerate(string_copy):
