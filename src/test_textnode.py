@@ -84,6 +84,11 @@ class TestTextNode(unittest.TestCase):
         new_node = inline_markdown_capture(node)
         self.assertIsNotNone(new_node, print(new_node))
 
+    def test_nodes_delimiter_link_header(self) -> None:  # review
+        node = "# This is 'test' drill"
+        new_node = inline_markdown_capture(node)
+        self.assertIsNotNone(new_node, print(new_node))
+
     def test_nodes_delimiter_img(self) -> None:
         node = "This `is` ![alt text for image](url/of/image.jpg) a drill"
         new_node = inline_markdown_capture(node)
@@ -135,7 +140,7 @@ class TestTextNode(unittest.TestCase):
         self.assertIsNotNone(read_block, print(read_block))
 
     def test_node_markdown_delimit_pattern_two(self) -> None:
-        block = ("""This is **bolded** paragraph
+        block = ("""# This is **bolded** paragraph
 
                 This is another paragraph with *italic* text and `code` here
                 This is the same paragraph on a new line
