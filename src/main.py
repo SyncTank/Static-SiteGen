@@ -3,23 +3,23 @@ import shutil
 import datetime
 from types import NotImplementedType
 
-from textnode import TextNode, html_builder
+from textnode import TextNode, html_builder, inline_markdown_capture, markdown_block
 from os import path, mkdir, listdir, read
 
 
-def extract_title(markdown_file: str) -> bool:
+def extract_title(markdown_file: str) -> str:
     if len(markdown_file) < 0:
-        return False
+        return ""
     try:
         with open(markdown_file) as file:
             first_line_check = file.readline()
     except Exception as e:
         print(e)
-        return False
+        return ""
     if '#' in first_line_check:
-        return True
+        return first_line_check
     else:
-        return False
+        return ""
 
 
 def read_file_with_check(file_to_check: str):
@@ -41,9 +41,34 @@ def read_file_with_check(file_to_check: str):
 
 def generate_page(from_page: str, template_page: str, dest_path: str) -> None:
     print(f"Generating Page from {from_page} to {dest_path} using {template_page}")
-    markdown_file = read_file_with_check(from_page)
-    template = read_file_with_check(template_page)
-    html_builder([markdown_file])
+    try:
+        template = read_file_with_check(template_page)
+
+        markdown_file = read_file_with_check(from_page)
+    except Exception:
+        raise FileNotFoundError("Starter files not found")
+
+    ext_title = extract_title(from_page).rstrip("\n")
+    title = markdown_block(ext_title)[0].to_html()
+
+    html_build = html_builder([markdown_file])
+    content = ""
+
+    for node in html_build:
+        content += node
+
+    template = template.replace(" {{ Title }} ", title)
+    final_template = template.replace(" {{ Content }}", content)
+
+    if os.path.exists(dest_path):
+        delete_files(dest_path)
+        f = open(dest_path, "w")
+        f.write(final_template)
+        f.close()
+    else:
+        f = open(dest_path, "w")
+        f.write(final_template)
+        f.close()
 
 
 # Use your markdown_to_html_node function and .to_html() method to convert the markdown file to HTML.
@@ -148,9 +173,10 @@ def main() -> None:
     load_dir("../static", "../public")
     print(extract_title("../content/index.md"))
 
-    if extract_title("../content/index.md"):
-        delete_files("../public")
+    if bool(extract_title("../content/index.md")):
+        #delete_files("../public")
         generate_page("../content/index.md", "../template.html", "../public/index.html")
 
 
-main()
+if __name__ == '__main__':
+    main()
