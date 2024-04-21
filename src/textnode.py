@@ -92,7 +92,7 @@ def inline_markdown_capture(old_node, old_node_type=None) -> list:
         for item in items:
             long_buffer.append(item)
 
-    if len(long_buffer) > 0:
+    if len(long_buffer) < 1:
         print(string_copy)
         return [TextNode(string_copy, 'text', None)]
 
