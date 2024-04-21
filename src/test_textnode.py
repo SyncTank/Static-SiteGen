@@ -79,6 +79,11 @@ class TestTextNode(unittest.TestCase):
         new_node = inline_markdown_capture(node)
         self.assertIsNotNone(new_node, print(new_node))
 
+    def test_nodes_delimiter_link_empty(self) -> None:  # review
+        node = "[here sdfa](/)"
+        new_node = inline_markdown_capture(node)
+        self.assertIsNotNone(new_node, print(new_node))
+
     def test_nodes_delimiter_link_italic(self) -> None:  # review
         node = "This is [here sdfa](www.google.com) *a* drill"
         new_node = inline_markdown_capture(node)
