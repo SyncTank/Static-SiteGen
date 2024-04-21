@@ -116,7 +116,7 @@ def inline_markdown_capture(old_node, old_node_type=None) -> list:
                 else:
                     text_node_list.append(TextNode(image_buffer[0], slice_setter[3], image_buffer[1]))
             elif long_buffer[counter_buffer][3] == 'link':
-                link_text = long_buffer[counter_buffer][2][2:-1]
+                link_text = long_buffer[counter_buffer][2][1:-1]
                 link_buffer = link_text.split("](")
                 text_node_list.append(TextNode(link_buffer[0], slice_setter[3], link_buffer[1]))
         else:
@@ -133,6 +133,7 @@ def inline_markdown_capture(old_node, old_node_type=None) -> list:
 
 
 def markdown_block(markdown) -> list:
+    final_inline_value = ""
     text_nodes_final = []
     mark_buffer = markdown.split('\n')
     second_buffer = []
@@ -188,12 +189,22 @@ def markdown_block(markdown) -> list:
                 leaf_childerns = []
                 if limit_type == 'ul' or limit_type == 'ol':
                     for item in temp_block:
-                        leaf_childerns.append(LeafNode("li", item[2:]))
+                        list_item = inline_markdown_capture(item[2:])
+                        final_inline_value = ""
+                        if len(list_item) > 0:
+                            for text_block in list_item:
+                                final_inline_value += text_block.text_node_to_html_node()
+                        leaf_childerns.append(LeafNode("li", final_inline_value))
                     block_items.append(ParentNode(limit_type, leaf_childerns.copy(), None))
                 elif limit_type == 'h':
                     for j in range(0, len(temp_block)):
                         temp_value = temp_block[j].strip("#").lstrip(" ")
-                        block_items.append(LeafNode("h" + str(temp_block[j].count("#")), temp_value, None))
+                        temp_inline = inline_markdown_capture(temp_value)
+                        if len(temp_inline) > 0:
+                            final_inline_value = ""
+                            for item in temp_inline:
+                                final_inline_value += item.text_node_to_html_node()
+                        block_items.append(LeafNode("h" + str(temp_block[j].count("#")), final_inline_value, None))
                 else:
                     block_items.append(temp_block.copy())
                 temp_block = []
@@ -210,12 +221,22 @@ def markdown_block(markdown) -> list:
                     leaf_childerns = []
                     if limit_type == 'ul' or limit_type == 'ol':
                         for item in temp_block:
-                            leaf_childerns.append(LeafNode("li", item[2:]))
+                            list_item = inline_markdown_capture(item[2:])
+                            final_inline_value = ""
+                            if len(list_item) > 0:
+                                for text_block in list_item:
+                                    final_inline_value += text_block.text_node_to_html_node()
+                            leaf_childerns.append(LeafNode("li", final_inline_value))
                         block_items.append(ParentNode(limit_type, leaf_childerns.copy(), None))
                     elif limit_type == 'h':
                         for j in range(0, len(temp_block)):
                             temp_value = temp_block[j].strip("#").lstrip(" ")
-                            block_items.append(LeafNode("h" + str(temp_block[j].count("#")), temp_value, None))
+                            temp_inline = inline_markdown_capture(temp_value)
+                            if len(temp_inline) > 0:
+                                final_inline_value = ""
+                                for item in temp_inline:
+                                    final_inline_value += item.text_node_to_html_node()
+                            block_items.append(LeafNode("h" + str(temp_block[j].count("#")), final_inline_value, None))
                     else:
                         block_items.append(temp_block.copy())
                     temp_block = []
@@ -234,12 +255,22 @@ def markdown_block(markdown) -> list:
         leaf_childerns = []
         if limit_type == 'ul' or limit_type == 'ol':
             for item in temp_block:
-                leaf_childerns.append(LeafNode("li", item[2:]))
+                list_item = inline_markdown_capture(item[2:])
+                final_inline_value = ""
+                if len(list_item) > 0:
+                    for text_block in list_item:
+                        final_inline_value += text_block.text_node_to_html_node()
+                leaf_childerns.append(LeafNode("li", final_inline_value))
             block_items.append(ParentNode(limit_type, leaf_childerns.copy(), None))
         elif limit_type == 'h':
             for j in range(0, len(temp_block)):
                 temp_value = temp_block[j].strip("#").lstrip(" ")
-                block_items.append(LeafNode("h" + str(temp_block[j].count("#")), temp_value, None))
+                temp_inline = inline_markdown_capture(temp_value)
+                if len(temp_inline) > 0:
+                    final_inline_value = ""
+                    for item in temp_inline:
+                        final_inline_value += item.text_node_to_html_node()
+                block_items.append(LeafNode("h" + str(temp_block[j].count("#")), final_inline_value, None))
         else:
             block_items.append(temp_block.copy())
 
