@@ -1,10 +1,8 @@
 import os.path
 import shutil
 import datetime
-from types import NotImplementedType
 
-from textnode import TextNode, html_builder, inline_markdown_capture, markdown_block
-from os import path, mkdir, listdir, read
+from textnode import html_builder, markdown_block
 
 
 def extract_title(markdown_file: str) -> str:
@@ -70,11 +68,6 @@ def generate_page(from_page: str, template_page: str, dest_path: str) -> None:
         f.write(final_template)
         f.close()
 
-
-# Use your markdown_to_html_node function and .to_html() method to convert the markdown file to HTML.
-# Use the extract_title function to grab the title of the page.
-# Replace the {{ Title }} and {{ Content }} placeholders in the template with the HTML and title you generated.
-# Write the new HTML to a file at dest_path. Be sure to create any necessary directories if they don't exist.
 
 def delete_files(path_delete: str) -> None:
     list_objs = os.listdir(path_delete)
@@ -170,12 +163,16 @@ def dir_copy_files(dir_copy_path: str, dir_moveto: str) -> None:
 
 
 def main() -> None:
-    load_dir("../static", "../public")
-    print(extract_title("../content/index.md"))
+    abso_path = os.path.abspath("..")
+    print(abso_path)
+    load_dir(f"{abso_path}\\static", f"{abso_path}\\public")
+    print(extract_title(f"{abso_path}\\content\\index.md"))
 
-    if bool(extract_title("../content/index.md")):
-        #delete_files("../public")
-        generate_page("../content/index.md", "../template.html", "../public/index.html")
+    if bool(extract_title(f"{abso_path}\\content\\index.md")):
+        # delete_files("../public")
+        generate_page(f"{abso_path}\\content\\index.md",
+                      f"{abso_path}\\template.html",
+                      f"{abso_path}\\public\\index.html")
 
 
 if __name__ == '__main__':
