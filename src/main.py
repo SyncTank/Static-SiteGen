@@ -102,7 +102,7 @@ def backup_and_make(path_make: str) -> None:
             if os.path.getmtime(f"../backups{path_make}/{folder}") < os.path.getmtime(
                     f"../backups{path_make}/{to_delete}"):
                 to_delete = folder
-        delete_files(to_delete)
+        delete_files(f"../backups{path_make}/{to_delete}")
         os.rmdir(f"../backups{path_make}/{to_delete}")
         make_backups(f"..{path_make}", f"../backups{path_make}/backup_{version_backups}_{time_backup}")
     else:
@@ -147,9 +147,8 @@ def dir_copy_files(dir_copy_path: str, dir_moveto: str) -> None:
 def main() -> None:
     load_dir("../static", "../public")
     print(extract_title("../content/index.md"))
-    start_gen = extract_title("../content/index.md")
 
-    if start_gen:
+    if extract_title("../content/index.md"):
         delete_files("../public")
         generate_page("../content/index.md", "../template.html", "../public/index.html")
 
