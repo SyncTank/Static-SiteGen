@@ -65,36 +65,70 @@ def delete_files(path_delete: str) -> None:
                 os.rmdir(file_path)
 
 
+def check_path(file_to_check: str) -> bool:
+    if not os.path.exists(file_to_check):
+        raise FileNotFoundError(f"No file is called {file_to_check}")
+    else:
+        return True
+
+
+def make_path(path_to_make: str) -> None:
+    os.mkdir(path_to_make)
+
+
+def make_backups(copy_path: str, backup_to_make: str) -> None:
+    if not os.path.exists(backup_to_make):
+        make_path(backup_to_make)
+    dir_copy_files(copy_path, backup_to_make)
+
+
+def backup_and_make(path_make: str) -> None:
+    print(f"Making backup directory {path_make}")
+
+    if path_make.count(".") > 0:
+        path_make = path_make.replace(".", "")
+
+    if not os.path.exists(f"../backups{path_make}"):
+        make_path(f"../backups{path_make}")
+
+    versions = os.listdir(f"../backups{path_make}")
+    version_backups = len(versions)
+    time_backup = datetime.datetime.now().strftime("%Y_%m_%d_%H_%M_%S")
+    if version_backups > 4:
+        to_delete = ""
+        for folder in versions:
+            if len(to_delete) == 0:
+                to_delete = folder
+            if os.path.getmtime(f"../backups{path_make}/{folder}") < os.path.getmtime(
+                    f"../backups{path_make}/{to_delete}"):
+                to_delete = folder
+        delete_files(to_delete)
+        os.rmdir(f"../backups{path_make}/{to_delete}")
+        make_backups(f"..{path_make}", f"../backups{path_make}/backup_{version_backups}_{time_backup}")
+    else:
+        make_backups(f"..{path_make}", f"../backups{path_make}/backup_{version_backups}_{time_backup}")
+
+
 def load_dir(dir_copy: str, dir_path: str) -> None:
-    if not os.path.exists(dir_copy):
-        raise FileNotFoundError(dir_copy)
-    if dir_path == "../public":
-        versions = os.listdir("../backup")
-        verison_backup = len(versions)
-        date_backup = datetime.date.today()
-        time_backup = datetime.datetime.today()
-        if verison_backup > 4:
-            to_del = ""
-            for folder in versions:
-                if len(to_del) == 0:
-                    to_del = folder
-                if os.path.getmtime(f"../backup/{folder}") < os.path.getmtime(f"../backup/{to_del}"):
-                    to_del = folder
-            delete_files(f"../backup/{to_del}")
-            os.rmdir(f"../backup/{to_del}")
-        load_dir(dir_path, f"../backup/backup_{verison_backup}_{date_backup}_{time_backup}")
+    try:
+        check_path(dir_copy)
+    except Exception as e:
+        print(e)
+
     if not os.path.exists(dir_path):
-        print(dir_copy, dir_path, "New folder created")
-        os.mkdir(dir_path)
+        print(f"Making directory {dir_path}")
+        make_path(dir_path)
+
+    if not os.path.exists("../backups"):
+        print(f"Making backup directory Backup files")
+        make_path("../backups")
+
+    if len(os.listdir(dir_path)) > 0:
+        backup_and_make(dir_path)
+        delete_files(dir_path)
         dir_copy_files(dir_copy, dir_path)
     else:
-        if not os.listdir(dir_path):
-            print(dir_copy, dir_path, "Empty directory")
-            dir_copy_files(dir_copy, dir_path)
-        else:
-            print(dir_copy, dir_path, "already exists")
-            delete_files(dir_path)
-            dir_copy_files(dir_copy, dir_path)
+        dir_copy_files(dir_copy, dir_path)
 
 
 def dir_copy_files(dir_copy_path: str, dir_moveto: str) -> None:
