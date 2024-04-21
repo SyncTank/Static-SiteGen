@@ -73,7 +73,7 @@ def inline_markdown_capture(old_node, old_node_type=None) -> list:
         raise Exception("Invalid Markdown syntax")
 
     if old_node_type == "text":
-        return [TextNode(old_node, 'text', None)] #  special tags refer HTML Node 
+        return [TextNode(old_node, 'text', None)]  #  special tags refer HTML Node
 
     if old_node is TextNode:
         return old_node
@@ -95,6 +95,10 @@ def inline_markdown_capture(old_node, old_node_type=None) -> list:
     for item in long_buffer:
         print(item)
 
+    if len(long_buffer) == 0:
+        print(string_copy)
+        return [TextNode(string_copy, 'text', None)]
+
     counter_buffer = 0
     for i, v in enumerate(string_copy):
         if i == long_buffer[counter_buffer][0]:
@@ -110,7 +114,10 @@ def inline_markdown_capture(old_node, old_node_type=None) -> list:
             elif long_buffer[counter_buffer][3] == 'image':
                 image_text = long_buffer[counter_buffer][2][2:-1]
                 image_buffer = image_text.split("](")
-                text_node_list.append(TextNode(image_buffer[0], slice_setter[3], image_buffer[1]))
+                if image_buffer[1].startswith("/"):
+                    text_node_list.append(TextNode(image_buffer[0], slice_setter[3], image_buffer[1][1:]))
+                else:
+                    text_node_list.append(TextNode(image_buffer[0], slice_setter[3], image_buffer[1]))
             elif long_buffer[counter_buffer][3] == 'link':
                 link_text = long_buffer[counter_buffer][2][2:-1]
                 link_buffer = link_text.split("](")
@@ -148,8 +155,6 @@ def markdown_block(markdown) -> list:
             string_builder += item + "\n"
         elif not capturing and item != '```':
             text.append(item)
-
-    
 
     temp_buffer = []
     for i, v in enumerate(text):
@@ -227,6 +232,19 @@ def markdown_block(markdown) -> list:
                         break
                 if not temp_block:
                     block_items.append(v)
+
+    if len(temp_block) > 0:
+        leaf_childerns = []
+        if limit_type == 'ul' or limit_type == 'ol':
+            for item in temp_block:
+                leaf_childerns.append(LeafNode("li", item[2:]))
+            block_items.append(ParentNode(limit_type, leaf_childerns.copy(), None))
+        elif limit_type == 'h':
+            for j in range(0, len(temp_block)):
+                temp_value = temp_block[j].strip("#").lstrip(" ")
+                block_items.append(LeafNode("h" + str(temp_block[j].count("#")), temp_value, None))
+        else:
+            block_items.append(temp_block.copy())
 
     for i, v in enumerate(block_items):
         if type(v) is not str:
