@@ -204,7 +204,7 @@ def markdown_block(markdown) -> list:
                             final_inline_value = ""
                             for item in temp_inline:
                                 final_inline_value += item.text_node_to_html_node()
-                        block_items.append(LeafNode("h" + str(temp_block[j].count("#")), final_inline_value, None))
+                        block_items.append(LeafNode("h" + str(temp_block[j].count("#")), final_inline_value.lstrip(" "), None))
                 else:
                     block_items.append(temp_block.copy())
                 temp_block = []
@@ -236,7 +236,7 @@ def markdown_block(markdown) -> list:
                                 final_inline_value = ""
                                 for item in temp_inline:
                                     final_inline_value += item.text_node_to_html_node()
-                            block_items.append(LeafNode("h" + str(temp_block[j].count("#")), final_inline_value, None))
+                            block_items.append(LeafNode("h" + str(temp_block[j].count("#")), final_inline_value.lstrip(" "), None))
                     else:
                         block_items.append(temp_block.copy())
                     temp_block = []
@@ -270,7 +270,7 @@ def markdown_block(markdown) -> list:
                     final_inline_value = ""
                     for item in temp_inline:
                         final_inline_value += item.text_node_to_html_node()
-                block_items.append(LeafNode("h" + str(temp_block[j].count("#")), final_inline_value, None))
+                block_items.append(LeafNode("h" + str(temp_block[j].count("#")), final_inline_value.lstrip(" "), None))
         else:
             block_items.append(temp_block.copy())
 
