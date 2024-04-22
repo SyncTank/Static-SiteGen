@@ -4,6 +4,8 @@ import datetime
 
 from textnode import html_builder, markdown_block
 
+version = 0.1
+
 
 def extract_title(markdown_file: str) -> str:
     if len(markdown_file) < 0:
@@ -35,6 +37,10 @@ def read_file_with_check(file_to_check: str):
         for item in read_lines:
             markdown += item
         return markdown
+
+
+def generate_pages_recursive(dir_path_content: str, template_path: str, dest_dir_path: str) -> None:
+    pass
 
 
 def generate_page(from_page: str, template_page: str, dest_path: str) -> None:
@@ -122,9 +128,9 @@ def backup_and_make(path_make: str) -> None:
                 to_delete = folder
         delete_files(f"../backups{path_make}/{to_delete}")
         os.rmdir(f"../backups{path_make}/{to_delete}")
-        make_backups(f"..{path_make}", f"../backups{path_make}/backup_{version_backups}_{time_backup}")
+        make_backups(f"..{path_make}", f"../backups{path_make}/backup_{version}_{time_backup}")
     else:
-        make_backups(f"..{path_make}", f"../backups{path_make}/backup_{version_backups}_{time_backup}")
+        make_backups(f"..{path_make}", f"../backups{path_make}/backup_{version}_{time_backup}")
 
 
 def load_dir(dir_copy: str, dir_path: str) -> None:
@@ -150,6 +156,7 @@ def load_dir(dir_copy: str, dir_path: str) -> None:
 
 
 def dir_copy_files(dir_copy_path: str, dir_moveto: str) -> None:
+    print(dir_copy_path)
     list_objs = os.listdir(dir_copy_path)
     if len(list_objs) == 0:
         return
@@ -163,15 +170,14 @@ def dir_copy_files(dir_copy_path: str, dir_moveto: str) -> None:
 
 
 def main() -> None:
-    abso_path = os.path.abspath("..")
-    print(abso_path)
-    load_dir(f"{abso_path}\\static", f"{abso_path}\\public")
-    print(extract_title(f"{abso_path}\\content\\index.md"))
+    print(os.getcwd())
+    load_dir(f"../static", f"../public")
+    print(extract_title(f"../content/index.md"))
 
-    if bool(extract_title(f"{abso_path}\\content\\index.md")):
-        generate_page(f"{abso_path}\\content\\index.md",
-                      f"{abso_path}\\template.html",
-                      f"{abso_path}\\public\\index.html")
+    if bool(extract_title(f"../content/index.md")):
+        generate_page(f"../content/index.md",
+                      f"../template.html",
+                      f"../public/index.html")
 
 
 if __name__ == '__main__':
