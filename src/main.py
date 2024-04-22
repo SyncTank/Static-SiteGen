@@ -40,7 +40,20 @@ def read_file_with_check(file_to_check: str):
 
 
 def generate_pages_recursive(dir_path_content: str, template_path: str, dest_dir_path: str) -> None:
-    pass
+    list_objects = os.listdir(dir_path_content)
+    print(list_objects, len(list_objects))
+    if len(list_objects) == 0:
+        return
+
+    for item in list_objects:
+        file_path = f"{dir_path_content}/{item}"
+        if file_path.endswith(".md"):
+            generate_page(file_path, template_path, dest_dir_path + "/" + item)
+        elif os.path.isfile(file_path):
+            shutil.copy(file_path, dest_dir_path)
+        else:
+            os.mkdir(dest_dir_path + "/" + item)
+            generate_pages_recursive(file_path, template_path, dest_dir_path + "/" + item)
 
 
 def generate_page(from_page: str, template_page: str, dest_path: str) -> None:
@@ -64,8 +77,10 @@ def generate_page(from_page: str, template_page: str, dest_path: str) -> None:
     template = template.replace(" {{ Title }} ", title)
     final_template = template.replace(" {{ Content }}", content)
 
+    dest_path = dest_path.rstrip(".md") + ".html"
+
     if os.path.exists(dest_path):
-        delete_files(dest_path)
+        os.remove(dest_path)
         f = open(dest_path, "w")
         f.write(final_template)
         f.close()
@@ -172,12 +187,10 @@ def dir_copy_files(dir_copy_path: str, dir_moveto: str) -> None:
 def main() -> None:
     print(os.getcwd())
     load_dir(f"../static", f"../public")
-    print(extract_title(f"../content/index.md"))
 
-    if bool(extract_title(f"../content/index.md")):
-        generate_page(f"../content/index.md",
-                      f"../template.html",
-                      f"../public/index.html")
+    generate_pages_recursive(f"../content",
+                             f"../template.html",
+                             f"../public")
 
 
 if __name__ == '__main__':
