@@ -2,6 +2,7 @@ import os
 import argparse
 from http.server import HTTPServer, SimpleHTTPRequestHandler
 
+
 # To run the server use : python server.py --dir public
 # Ctrl + C to stop server
 class CORSHTTPRequestHandler(SimpleHTTPRequestHandler):
