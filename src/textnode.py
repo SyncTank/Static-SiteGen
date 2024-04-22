@@ -189,7 +189,7 @@ def markdown_block(markdown) -> list:
                 leaf_childerns = []
                 if limit_type == 'ul' or limit_type == 'ol':
                     for item in temp_block:
-                        list_item = inline_markdown_capture(item[2:])
+                        list_item = inline_markdown_capture(item[2:].lstrip(" "))
                         final_inline_value = ""
                         if len(list_item) > 0:
                             for text_block in list_item:
@@ -221,7 +221,7 @@ def markdown_block(markdown) -> list:
                     leaf_childerns = []
                     if limit_type == 'ul' or limit_type == 'ol':
                         for item in temp_block:
-                            list_item = inline_markdown_capture(item[2:])
+                            list_item = inline_markdown_capture(item[2:].lstrip(" "))
                             final_inline_value = ""
                             if len(list_item) > 0:
                                 for text_block in list_item:
@@ -255,7 +255,7 @@ def markdown_block(markdown) -> list:
         leaf_childerns = []
         if limit_type == 'ul' or limit_type == 'ol':
             for item in temp_block:
-                list_item = inline_markdown_capture(item[2:])
+                list_item = inline_markdown_capture(item[2:].lstrip(" "))
                 final_inline_value = ""
                 if len(list_item) > 0:
                     for text_block in list_item:
